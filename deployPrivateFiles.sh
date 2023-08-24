@@ -1,6 +1,8 @@
-# Path: deployPrivateFiles.sh
-# create a script that should copy every folder and files within "/home/phearion/aniaPrivate/" to current directory/assets
+#!/bin/bash
 
-CURRENT_DIR=$(pwd)
-cp -a /home/Phearion/aniaPrivate/* $CURRENT_DIR/src/assets
-cp -r /home/Phearion/bots/A-Nia/app/.env $CURRENT_DIR/
+# Set the source and destination directories
+SOURCE_DIR="/home/Phearion/aniaPrivate"
+DEST_DIR="$(pwd)/src/assets"
+
+# Copy files and directories recursively
+cp -a "$SOURCE_DIR"/* "$DEST_DIR"
