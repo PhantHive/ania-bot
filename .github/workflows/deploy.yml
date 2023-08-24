@@ -37,7 +37,7 @@ jobs:
         with:
           host: ${{ secrets.PROD_SERVER_IP }}
           username: ${{ secrets.PROD_SERVER_USER }}
-          ssh_private_key: ${{ secrets.PROD_SERVER_SSH }}
+          key: ${{ secrets.PROD_SERVER_SSH }}
           port: ${{ secrets.PROD_SERVER_PORT }}
 
       - name: Start bot with pm2
