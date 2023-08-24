@@ -16,7 +16,7 @@ const dbConnect = {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             autoIndex: false,
-            connectTimeoutMS: 20000,
+            connectTimeoutMS: 70000,
             maxPoolSize: 100,
             family: 4,
         };

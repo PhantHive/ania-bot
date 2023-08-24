@@ -54,9 +54,6 @@ const verification = class Verif {
 
         // Simple iteration over flattened data
         for (let key in mailVerifFlattened) {
-            console.log(mailVerifFlattened);
-            console.log(mailVerifFlattened[key]);
-
             // Directly access promo years
             const promoDict = mailVerifFlattened[key];
 
@@ -69,7 +66,6 @@ const verification = class Verif {
                 if (promoDict[promoYear].includes(this.mail.toLowerCase())) {
                     // Extract city and degree from key
                     const [city, degree] = key.split('-');
-
                     this.city = city;
                     this.degree = degree;
                     this.promo = promoYear;
@@ -93,8 +89,6 @@ const verification = class Verif {
         }
 
         if (mdata.email === '') {
-            console.log('Mail not found');
-
             if (this.mail) {
                 let name = this.mail.substring(0, this.mail.indexOf('@'));
                 let firstName = name.substring(0, this.mail.indexOf('.'));

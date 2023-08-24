@@ -10,6 +10,7 @@ import {
 exports.default = new SlashCommand({
     name: 'email-verif',
     description: 'Verification Email',
+    userPermissions: ['Administrator'],
     run: async ({ interaction }) => {
         const actionRow = new ActionRowBuilder<ButtonBuilder>();
         // create button to open modal
@@ -22,10 +23,7 @@ exports.default = new SlashCommand({
 
         // send button to channel id 824329178450493512
         try {
-            const channel = interaction.guild.channels.cache.find(
-                (ch) => ch.id === '1047648564236517396'
-            ) as TextChannel;
-            await channel.send({ components: [actionRow] });
+            await interaction.channel.send({ components: [actionRow] });
         } catch (e) {
             await interaction.reply({
                 content: 'Une erreur est survenue' + e,
