@@ -40,6 +40,9 @@ jobs:
           key: ${{ secrets.PROD_SERVER_SSH }}
           port: ${{ secrets.PROD_SERVER_PORT }}
 
+      - name: Stop bot with pm2 if running
+        run: pm2 stop ania || true
+
       - name: Start bot with pm2
         run: pm2 start dist/index.js --name ania
 
