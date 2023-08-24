@@ -1,0 +1,11 @@
+node_modules
+.vscode
+.env
+.idea/
+src/assets/admin/
+src/assets/aero1Sources/
+src/assets/aero2Sources/
+src/assets/aero3Sources/
+src/assets/json/
+dist/
+

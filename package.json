@@ -1,0 +1,55 @@
+{
+  "name": "a-nia",
+  "version": "1.0.0",
+  "description": "<h1 align=\"center\">    <br>     <img src=\"./assets/image/logo/ania.jpg\">   <br>     A-Nia    <br> </h1>",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "start:dev": "ts-node-dev src/index.ts",
+    "start:prod": "node dist/index.js",
+    "copy:assets": "node copy-assets.js",
+    "build": "tsc -p tsconfig.json",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "watch": "tsc -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PhantHive/Ania.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PhantHive/Ania/issues"
+  },
+  "homepage": "https://github.com/PhantHive/Ania#readme",
+  "dependencies": {
+    "ascii-table": "^0.0.9",
+    "async-mutex": "^0.4.0",
+    "axios": "^1.4.0",
+    "canvas": "^2.11.2",
+    "check-for-updates": "^1.0.5",
+    "cheerio": "^1.0.0-rc.12",
+    "crypto-js": "^4.1.1",
+    "discord.js": "^14.13.0",
+    "dotenv": "^16.3.1",
+    "ffmpeg": "^0.0.4",
+    "fs-extra": "^11.1.1",
+    "lodash": "^4.17.21",
+    "mongoose": "^7.4.4",
+    "superagent": "^8.1.2",
+    "ytdl-core": "^4.11.5",
+    "ytsr": "^3.8.4"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.1.1",
+    "@types/glob": "^8.1.0",
+    "@types/lodash": "^4.14.197",
+    "@types/node": "^20.5.4",
+    "@types/superagent": "^4.1.18",
+    "dotenv": "^16.3.1",
+    "prettier": "3.0.2",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.1.6"
+  }
+}
