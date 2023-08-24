@@ -4,9 +4,6 @@ on:
   push:
     tags:
       - 'v*' # Trigger the workflow on tags starting with 'v'
-    branches:
-      - main # Trigger the workflow on push or pull request events for the main branch
-
 jobs:
   deploy:
     runs-on: self-hosted
@@ -40,7 +37,7 @@ jobs:
         with:
           host: ${{ secrets.PROD_SERVER_IP }}
           username: ${{ secrets.PROD_SERVER_USER }}
-          password: ${{ secrets.PROD_SERVER_PASSWORD }}
+          ssh_private_key: ${{ secrets.PROD_SERVER_SSH }}
           port: ${{ secrets.PROD_SERVER_PORT }}
 
       - name: Start bot with pm2
