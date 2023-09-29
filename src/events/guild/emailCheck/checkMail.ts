@@ -82,7 +82,7 @@ const verification = class Verif {
 
         if (!mailFound) {
             return (
-                ':bangbang: Vérification ouverte pour les **2028** uniquement\n' +
+                ':bangbang: Vérification ouverte pour tous sauf **Toulouse** pour le moment.\n' +
                 "Il semblerait que tu te sois trompé dans l'écriture de ton mail.\n" +
                 "Si tu penses qu'il s'agit d'une erreur provenant du bot je t'invite à mp un responsable discord ou à nous écrire dans le channel <#880491243807846457> ou <#884489030501294160>."
             );
