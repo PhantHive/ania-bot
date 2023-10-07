@@ -20,8 +20,12 @@ const checkForMissingRoles = async (message: Message, data): Promise<void> => {
                     const role = guild.roles.cache.find((r) => r.name.includes(promoToRole[data.promo]));
                     if (role) {
                         if (!member.roles.cache.has(role.id)) {
-                            await member.roles.add(role);
-                            await message.reply(`Je t'ai trouvé dans ce serveur: **${guild.name}** et je t'ai donné le rôle: **${role.name}**`);
+                            try {
+                                await member.roles.add(role);
+                                await message.reply(`Je t'ai trouvé dans ce serveur: **${guild.name}** et je t'ai donné le rôle: **${role.name}**`);
+                            } catch (error) {
+                                await message.reply(`Je n'ai pas la permission de te donner le rôle: **${role.name}** dans ce serveur: **${guild.name}**\n`);
+                            }
                         }
                     } else {
                         await message.reply(`Je n'ai pas trouvé le rôle: **${promoToRole[data.promo]}** dans ce serveur: **${guild.name}**\n`
@@ -47,6 +51,9 @@ const checkIfDataIsValid = async (message: Message): Promise<void> => {
             await message.reply('**Ton compte n\'est pas vérifié !**\n' +
                 '** La vérification s\'effectue dans le channel: <#1047648564236517396>. **');
         }
+    } else {
+        await message.reply('**Ton compte n\'est pas vérifié !**\n' +
+            '** La vérification s\'effectue dans le channel: <#1047648564236517396>. **');
     }
 }
 
