@@ -41,8 +41,8 @@ jobs:
       - name: Package only the clean deployment directory
         uses: actions/upload-artifact@v2
         with:
-          name: clean_deploy
-          path: clean_deploy
+          name: deploy
+          path: deploy
 
       - name: Deploy to server
         uses: appleboy/ssh-action@master
@@ -52,7 +52,7 @@ jobs:
           key: ${{ secrets.PROD_SERVER_SSH }}
           port: ${{ secrets.PROD_SERVER_PORT }}
           script: |
-            unzip -o clean_deploy.zip -d /path/to/your/application
+            unzip -o deploy.zip -d deploy
 
       - name: Stop bot with pm2 if running
         run: pm2 stop ania || true
