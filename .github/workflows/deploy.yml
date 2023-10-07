@@ -43,11 +43,10 @@ jobs:
           key: ${{ secrets.PROD_SERVER_SSH }}
           port: ${{ secrets.PROD_SERVER_PORT }}
           command: "unzip -o deploy.zip -d dist"
-          script: |
 
       # remove everything except on bash dist/
-      - name: Remove everything except dist/
-        run: ls -I dist | xargs rm -rf
+      - name: Remove everything except dist/ and node_modules/
+        run: ls -I dist -I node_modules | xargs rm -rf
 
       - name: Stop bot with pm2 if running
         run: pm2 stop ania || true
