@@ -23,10 +23,10 @@ async function copyAssets() {
         await fs.copy(join(__dirname, '/src/assets/json'), join(__dirname, '/dist/assets/json'));
 
         // Copy utils directory
-        await fs.copy(join(__dirname, 'src/assets/utils'), join(__dirname, 'dist/assets/utils'));
+        await fs.copy('src/assets/utils', 'dist/assets/utils');
 
         // Move deployPrivateFiles.sh to dist
-        await fs.copy(join(__dirname, 'deployPrivateFiles.sh'), join(__dirname, 'dist/deployPrivateFiles.sh'));
+        await fs.copy('deployPrivateFiles.sh', 'dist/deployPrivateFiles.sh');
 
         console.log('Assets copied successfully.');
     } catch (error) {
