@@ -2,11 +2,11 @@ import { Event } from '../../structures/Event';
 import MV from '../../typings/MongoTypes';
 
 const promoToRole = {
-    28: 'aero1',
-    27: 'aero2',
-    26: 'aero3',
-    25: 'aero4',
-    24: 'aero5',
+    2028: 'aero1',
+    2027: 'aero2',
+    2026: 'aero3',
+    2025: 'aero4',
+    2024: 'aero5',
 };
 
 async function assignPromoRole(member, promo) {
