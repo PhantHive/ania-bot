@@ -114,10 +114,10 @@ const verification = class Verif {
                     this.mail.toLowerCase(),
                     process.env.AES
                 ).toString();
-                console.log(this.promo.slice(2));
+                console.log(this.promo);
 
                 try {
-                    mdata.promo = Number(this.promo.slice(2));
+                    mdata.promo = Number(this.promo);
                 } catch (err) {
                     console.log('Issue with promo');
                 }

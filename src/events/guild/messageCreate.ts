@@ -1,6 +1,6 @@
 import { Event } from '../../structures/Event';
 import { ChannelType } from 'discord.js';
-import {autoCheckForRoles } from "./autoCheckForRoles/autoGiveRole";
+import { autoCheckForRoles } from "./autoCheckForRoles/autoGiveRole";
 
 export default new Event('messageCreate', async (message) => {
     if (message.author.bot) return;
