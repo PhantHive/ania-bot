@@ -52,7 +52,7 @@ jobs:
           key: ${{ secrets.PROD_SERVER_SSH }}
           port: ${{ secrets.PROD_SERVER_PORT }}
           script: |
-            unzip -o clean_deploy.zip -d /path/to/your/application
+            unzip -o clean_deploy.zip -d clean_deploy
 
       - name: Stop bot with pm2 if running
         run: pm2 stop ania || true
