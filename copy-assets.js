@@ -25,6 +25,9 @@ async function copyAssets() {
         // Copy utils directory
         await fs.copy('src/assets/utils', 'dist/assets/utils');
 
+        // Move deployPrivateFiles.sh to dist
+        await fs.copy('deployPrivateFiles.sh', 'dist/deployPrivateFiles.sh');
+
         console.log('Assets copied successfully.');
     } catch (error) {
         console.error('Error copying assets:', error);
