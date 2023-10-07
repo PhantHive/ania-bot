@@ -29,8 +29,11 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Package code
-        run: zip -r deploy.zip dist
+      - name: Package only the dist folder
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: dist
 
       - name: Deploy to server
         uses: appleboy/ssh-action@master
@@ -39,6 +42,7 @@ jobs:
           username: ${{ secrets.PROD_SERVER_USER }}
           key: ${{ secrets.PROD_SERVER_SSH }}
           port: ${{ secrets.PROD_SERVER_PORT }}
+          command: "unzip -o deploy.zip -d dist"
 
       - name: Stop bot with pm2 if running
         run: pm2 stop ania || true
