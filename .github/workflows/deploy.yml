@@ -29,20 +29,11 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Create a clean deployment directory
-        run: |
-          mkdir clean_deploy
-          mv dist clean_deploy/
-          mv deployPrivateFiles.sh clean_deploy/
-          # Add other necessary files or directories to the clean_deploy directory
-          mv clean_deploy/* ./
-          rm -r clean_deploy
-
-      - name: Package only the clean deployment directory
+      - name: Package only the dist folder
         uses: actions/upload-artifact@v2
         with:
-          name: clean_deploy
-          path: clean_deploy
+          name: dist
+          path: dist
 
       - name: Deploy to server
         uses: appleboy/ssh-action@master
@@ -51,8 +42,12 @@ jobs:
           username: ${{ secrets.PROD_SERVER_USER }}
           key: ${{ secrets.PROD_SERVER_SSH }}
           port: ${{ secrets.PROD_SERVER_PORT }}
+          command: "unzip -o deploy.zip -d dist"
           script: |
-            unzip -o clean_deploy.zip -d /path/to/your/application
+
+      # remove everything except on bash dist/
+      - name: Remove everything except dist/
+        run: ls -I dist | xargs rm -rf
 
       - name: Stop bot with pm2 if running
         run: pm2 stop ania || true
