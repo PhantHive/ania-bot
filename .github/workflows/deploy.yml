@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*' # Trigger the workflow on tags starting with 'v'
+
 jobs:
   deploy:
     runs-on: self-hosted
@@ -29,22 +30,16 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Create a clean deployment directory
-        run: |
-          mkdir clean_deploy
-          mv dist clean_deploy/
-          mv deployPrivateFiles.sh clean_deploy/
-          # Add other necessary files or directories to the clean_deploy directory
-          mv clean_deploy/* ./
-          rm -r clean_deploy
-
-      - name: Package only the clean deployment directory
+      - name: Package only the dist folder
         uses: actions/upload-artifact@v2
         with:
-          name: clean_deploy
-          path: clean_deploy
+          name: dist
+          path: dist
 
-      - name: Deploy to server
+      # Removed the "Deploy to server" step here
+      # This step will only package the dist folder and not execute any commands on the remote server
+
+      - name: Stop bot with pm2 if running on the remote server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.PROD_SERVER_IP }}
@@ -52,13 +47,27 @@ jobs:
           key: ${{ secrets.PROD_SERVER_SSH }}
           port: ${{ secrets.PROD_SERVER_PORT }}
           script: |
-            unzip -o clean_deploy.zip -d /path/to/your/application
+            # Stop the bot using PM2 on the remote server
+            pm2 stop ania || true
 
-      - name: Stop bot with pm2 if running
-        run: pm2 stop ania || true
+      - name: Start bot with pm2 on the remote server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PROD_SERVER_IP }}
+          username: ${{ secrets.PROD_SERVER_USER }}
+          key: ${{ secrets.PROD_SERVER_SSH }}
+          port: ${{ secrets.PROD_SERVER_PORT }}
+          script: |
+            # Start the bot using PM2 on the remote server
+            pm2 start dist/index.js --name ania-bot
 
-      - name: Start bot with pm2
-        run: pm2 start dist/index.js --name ania
-
-      - name: Save pm2 process list
-        run: pm2 save
+      - name: Save pm2 process list on the remote server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PROD_SERVER_IP }}
+          username: ${{ secrets.PROD_SERVER_USER }}
+          key: ${{ secrets.PROD_SERVER_SSH }}
+          port: ${{ secrets.PROD_SERVER_PORT }}
+          script: |
+            # Save the PM2 process list on the remote server
+            pm2 save
