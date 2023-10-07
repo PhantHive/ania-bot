@@ -44,6 +44,9 @@ jobs:
           port: ${{ secrets.PROD_SERVER_PORT }}
           command: "unzip -o deploy.zip -d dist"
 
+      - name: Whoami after deploy
+        run: whoami
+
       # remove everything except on bash dist/
       - name: Remove everything except dist/ and node_modules/
         run: ls -I dist -I node_modules | xargs rm -rf
