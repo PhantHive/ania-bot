@@ -14,12 +14,21 @@ import { verification } from './emailCheck/checkMail';
 import { RunOptions } from '../../typings/SlashCommand';
 import MV from '../../typings/MongoTypes';
 import {
-    ButtonInteraction,
+    ButtonInteraction, CommandInteraction,
     ModalSubmitInteraction,
     StringSelectMenuInteraction,
 } from 'discord.js';
 
 export default new Event('interactionCreate', async (interaction) => {
+
+    if (!interaction.inGuild()) {
+
+        return await (interaction as CommandInteraction).reply({
+            content: 'This command is only available in a guild.'
+        });
+
+    }
+
     if (interaction.isStringSelectMenu()) {
         const menu = interaction as StringSelectMenuInteraction;
 
