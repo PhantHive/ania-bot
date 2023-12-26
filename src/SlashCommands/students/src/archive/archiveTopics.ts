@@ -1,11 +1,17 @@
 import { Canvas } from 'canvas';
-import { AttachmentBuilder, ActionRowBuilder, ButtonBuilder } from 'discord.js';
+import {
+    AttachmentBuilder,
+    ActionRowBuilder,
+    ButtonBuilder,
+    CacheType,
+} from 'discord.js';
 import { join } from 'path';
 import { readdirSync } from 'fs';
 import drawArchiveCanvas from '../canvas/drawingCanvas';
 import { ButtonInteraction } from 'discord.js';
 import data from '../../../../assets/json/promos.json';
 import { translator } from './translator';
+import { numbers, userPages } from './userPages';
 
 const getTopics = async (
     category: string,
@@ -87,24 +93,16 @@ const getTopics = async (
 };
 
 const drawTopicsCanvas = async (
+    interaction: ButtonInteraction<CacheType>,
     title: string,
     field: string,
     ressource: string
 ) => {
-    const numbers: string[] = [
-        '994405022894919820',
-        '994405021070401576',
-        '994405018167934976',
-        '994405016246947860',
-        '994405014523097158',
-        '994405012799238214',
-        '94405009355722772',
-    ];
-
     const category: string = field.split('-')[1];
     const topicName: string = field.split('-')[0];
 
     const row = new ActionRowBuilder<ButtonBuilder>();
+    const row2 = new ActionRowBuilder<ButtonBuilder>();
 
     const topics: string[] = await getTopics(category, topicName, ressource);
 
@@ -115,8 +113,36 @@ const drawTopicsCanvas = async (
         return { buffer: null, row: null };
     }
 
-    const canvas: Canvas = await drawArchiveCanvas(title, translatedTopics);
-    topics.forEach((topic, index) => {
+    const totalPages = Math.ceil(translatedTopics.length / 8);
+    console.log(interaction.user.id);
+    if (!userPages.has(interaction.user.id)) {
+        userPages.set(interaction.user.id, { currentPage: 0, totalPages });
+    } else {
+        const userPage = userPages.get(interaction.user.id);
+        userPages.set(interaction.user.id, { ...userPage, totalPages });
+    }
+
+    const { currentPage } = userPages.get(interaction.user.id);
+    const currentTopics = translatedTopics.slice(
+        currentPage * 8,
+        (currentPage + 1) * 8
+    );
+
+    console.log('tops: ', currentTopics);
+
+    let currentTopicsRow1;
+    let currentTopicsRow2;
+
+    if (currentTopics.length > 4) {
+        currentTopicsRow1 = currentTopics.slice(0, 4);
+        currentTopicsRow2 = currentTopics.slice(4, 8);
+    } else {
+        currentTopicsRow1 = currentTopics;
+        currentTopicsRow2 = [];
+    }
+
+    const canvas: Canvas = await drawArchiveCanvas(title, currentTopics);
+    currentTopicsRow1.forEach((topic, index) => {
         if (topic == null) {
             return;
         }
@@ -131,12 +157,47 @@ const drawTopicsCanvas = async (
         } catch (e) {}
     });
 
+    currentTopicsRow2.forEach((topic, index) => {
+        if (topic == null) {
+            return;
+        }
+
+        try {
+            row2.addComponents(
+                new ButtonBuilder()
+                    .setCustomId(`${topicName}-${category}-${topic}-topics`)
+                    .setEmoji(numbers[index + 4])
+                    .setStyle(2)
+            );
+        } catch (e) {}
+    });
+
+    if (totalPages > 1) {
+        if (currentPage > 0) {
+            row.addComponents(
+                new ButtonBuilder()
+                    .setCustomId(`${topicName}-${category}_topic-previous`)
+                    .setLabel('👈')
+                    .setStyle(2)
+            );
+        }
+
+        if (currentPage < totalPages - 1) {
+            row2.addComponents(
+                new ButtonBuilder()
+                    .setCustomId(`${topicName}-${category}_topic-next`)
+                    .setLabel('👉')
+                    .setStyle(2)
+            );
+        }
+    }
+
     // canvas to gif as a message attachment for discord
     const buffer = new AttachmentBuilder(canvas.toBuffer(), {
         name: 'archive.gif',
     });
 
-    return { buffer, row };
+    return { buffer, row, row2 };
 };
 
 const showTopics = async (interaction: ButtonInteraction, field: string) => {
@@ -147,7 +208,8 @@ const showTopics = async (interaction: ButtonInteraction, field: string) => {
         }
     });
 
-    const { buffer, row } = await drawTopicsCanvas(
+    const { buffer, row, row2 } = await drawTopicsCanvas(
+        interaction,
         'Les modules',
         field,
         ressource
@@ -159,9 +221,22 @@ const showTopics = async (interaction: ButtonInteraction, field: string) => {
         });
     }
 
-    await interaction
-        .update({ content: '', files: [buffer], components: [row] })
-        .catch((err) => console.error(err));
+    const components = [];
+    components.push(row);
+
+    if (row2 !== undefined && row2 !== null) {
+        components.push(row2);
+    }
+
+    try {
+        await interaction.update({
+            content: '',
+            files: [buffer],
+            components: components,
+        });
+    } catch (e) {
+        throw e;
+    }
 };
 
 export { drawTopicsCanvas, showTopics };

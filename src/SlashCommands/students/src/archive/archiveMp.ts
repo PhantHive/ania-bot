@@ -1,11 +1,17 @@
 import { Canvas } from 'canvas';
-import { AttachmentBuilder, ButtonBuilder, ActionRowBuilder } from 'discord.js';
+import {
+    AttachmentBuilder,
+    ButtonBuilder,
+    ActionRowBuilder,
+    CacheType,
+} from 'discord.js';
 import { join } from 'path';
 import { readdirSync } from 'fs';
 import drawArchiveCanvas from '../canvas/drawingCanvas';
 import { ButtonInteraction } from 'discord.js';
 import data from '../../../../assets/json/promos.json';
 import { translator } from './translator';
+import { numbers, userPages } from './userPages';
 
 const getMps = async (ressource: string): Promise<string[]> => {
     const fields = [];
@@ -39,18 +45,12 @@ const getMps = async (ressource: string): Promise<string[]> => {
     return fields;
 };
 
-const drawMpCanvas = async (ressource: string) => {
-    const numbers = [
-        '994405022894919820',
-        '994405021070401576',
-        '994405018167934976',
-        '994405016246947860',
-        '994405014523097158',
-        '994405012799238214',
-        '94405009355722772',
-    ];
-
+const drawMpCanvas = async (
+    interaction: ButtonInteraction<CacheType>,
+    ressource: string
+) => {
     const row = new ActionRowBuilder<ButtonBuilder>();
+    const row2 = new ActionRowBuilder<ButtonBuilder>();
 
     const topics: string[] = await getMps(ressource);
 
@@ -61,10 +61,34 @@ const drawMpCanvas = async (ressource: string) => {
         return { buffer: null, row: null };
     }
 
-    console.log(topics);
+    const totalPages = Math.ceil(translatedTopics.length / 8);
+
+    if (!userPages.has(interaction.user.id)) {
+        userPages.set(interaction.user.id, { currentPage: 0, totalPages });
+    } else {
+        const userPage = userPages.get(interaction.user.id);
+        userPages.set(interaction.user.id, { ...userPage, totalPages });
+    }
+
+    const { currentPage } = userPages.get(interaction.user.id);
+    const currentTopics = translatedTopics.slice(
+        currentPage * 8,
+        (currentPage + 1) * 8
+    );
     const canvas: Canvas = await drawArchiveCanvas('Les mps', translatedTopics);
 
-    topics.forEach((topic, index) => {
+    let currentTopicsRow1;
+    let currentTopicsRow2;
+
+    if (currentTopics.length > 4) {
+        currentTopicsRow1 = currentTopics.slice(0, 4);
+        currentTopicsRow2 = currentTopics.slice(4, 8);
+    } else {
+        currentTopicsRow1 = currentTopics;
+        currentTopicsRow2 = [];
+    }
+
+    currentTopicsRow1.forEach((topic, index) => {
         if (topic == null) {
             return;
         } else {
@@ -79,12 +103,47 @@ const drawMpCanvas = async (ressource: string) => {
         }
     });
 
+    currentTopicsRow2.forEach((topic, index) => {
+        if (topic == null) {
+            return;
+        } else {
+            try {
+                row.addComponents(
+                    new ButtonBuilder()
+                        .setCustomId(`${topic}-mp`)
+                        .setEmoji(numbers[index + 4])
+                        .setStyle(2)
+                );
+            } catch (e) {}
+        }
+    });
+
+    if (totalPages > 1) {
+        if (currentPage > 0) {
+            row.addComponents(
+                new ButtonBuilder()
+                    .setCustomId('_mp-previous')
+                    .setLabel('👈')
+                    .setStyle(2)
+            );
+        }
+
+        if (currentPage < totalPages - 1) {
+            row2.addComponents(
+                new ButtonBuilder()
+                    .setCustomId('_mp-next')
+                    .setLabel('👉')
+                    .setStyle(2)
+            );
+        }
+    }
+
     // canvas to gif as a message attachment for discord
     const buffer = new AttachmentBuilder(canvas.toBuffer(), {
         name: 'archive.gif',
     });
 
-    return { buffer, row };
+    return { buffer, row, row2 };
 };
 
 const showMps = async (interaction: ButtonInteraction) => {
@@ -95,7 +154,7 @@ const showMps = async (interaction: ButtonInteraction) => {
         }
     });
 
-    const { buffer, row } = await drawMpCanvas(ressource);
+    const { buffer, row, row2 } = await drawMpCanvas(interaction, ressource);
 
     if (buffer === null || row === null) {
         return interaction.update({
@@ -103,9 +162,22 @@ const showMps = async (interaction: ButtonInteraction) => {
         });
     }
 
-    await interaction
-        .update({ content: '', files: [buffer], components: [row] })
-        .catch((err) => console.error(err));
+    const components = [];
+    components.push(row);
+
+    if (row2.components.length > 0) {
+        components.push(row2);
+    }
+
+    try {
+        await interaction.update({
+            content: '',
+            files: [buffer],
+            components: components,
+        });
+    } catch (e) {
+        throw e;
+    }
 };
 
 export { drawMpCanvas, showMps };

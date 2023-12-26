@@ -1,11 +1,23 @@
 import { client } from '../../index';
 import { Event } from '../../structures/Event';
-import { showMps } from '../../SlashCommands/students/src/archive/archiveMp';
-import { showTps } from '../../SlashCommands/students/src/archive/archiveTp';
-import { showTopics } from '../../SlashCommands/students/src/archive/archiveTopics';
+import {
+    drawMpCanvas,
+    showMps,
+} from '../../SlashCommands/students/src/archive/archiveMp';
+import {
+    drawTpCanvas,
+    showTps,
+} from '../../SlashCommands/students/src/archive/archiveTp';
+import {
+    drawTopicsCanvas,
+    showTopics,
+} from '../../SlashCommands/students/src/archive/archiveTopics';
 import { getFiles } from '../../SlashCommands/students/src/archive/ffe';
 import { join } from 'path';
-import { showFiches } from '../../SlashCommands/students/src/archive/archiveFiches';
+import {
+    drawFicheCanvas,
+    showFiches,
+} from '../../SlashCommands/students/src/archive/archiveFiches';
 import data from '../../assets/json/promos.json';
 import { addRole, writeRole, removeRoles } from './ipsaRoles/addRoles';
 import { showModal } from './emailCheck/showModal';
@@ -17,7 +29,12 @@ import {
     CommandInteraction,
     ModalSubmitInteraction,
     StringSelectMenuInteraction,
+    TextChannel,
 } from 'discord.js';
+import {
+    sendNewPage,
+    userPages,
+} from '../../SlashCommands/students/src/archive/userPages';
 
 export default new Event('interactionCreate', async (interaction) => {
     if (!interaction.inGuild()) {
@@ -71,6 +88,7 @@ export default new Event('interactionCreate', async (interaction) => {
 
     if (interaction.isButton()) {
         const button = interaction as ButtonInteraction;
+        const userId = button.user.id;
 
         // ===============
         // IPSA EMAIL SYSTEM
@@ -150,6 +168,7 @@ export default new Event('interactionCreate', async (interaction) => {
         // ===============
         // ARCHIVE SYSTEM
         // ===============
+
         if (button.customId === 'mp') {
             await showMps(button)
                 .then()
@@ -215,6 +234,109 @@ export default new Event('interactionCreate', async (interaction) => {
             } catch (err) {
                 console.log(err);
             }
+        }
+
+        if (
+            button.customId.endsWith('-previous') ||
+            button.customId.endsWith('-next')
+        ) {
+            if (!userPages.has(userId)) {
+                userPages.set(userId, {
+                    currentPage: 0,
+                    totalPages: 0,
+                });
+            }
+            const { currentPage, totalPages } = userPages.get(userId);
+
+            //  reduce the current page by one if the button is previous
+            if (button.customId.endsWith('-previous')) {
+                userPages.set(interaction.user.id, {
+                    currentPage: currentPage - 1,
+                    totalPages,
+                });
+            }
+
+            // increase the current page by one if the button is next
+            if (button.customId.endsWith('-next')) {
+                userPages.set(interaction.user.id, {
+                    currentPage: currentPage + 1,
+                    totalPages,
+                });
+            }
+
+            // Redraw the buttons
+            let ressource: string;
+            data.forEach((promo) => {
+                if (promo['id'] === button.guild.id) {
+                    ressource = promo['ressources'];
+                }
+            });
+
+            // topic is between "_" and "-" in the string
+            const topic = button.customId.split('_')[1].split('-')[0];
+            if (topic === 'topic') {
+                const field = button.customId.split('_')[0];
+                console.log('category: ' + field);
+                const { buffer, row, row2 } = await drawTopicsCanvas(
+                    interaction,
+                    'Les modules',
+                    field,
+                    ressource
+                );
+                console.log('row: ' + row);
+                await sendNewPage(button, buffer, row, row2);
+            }
+
+            if (topic === 'sheet') {
+                const { buffer, row, row2 } = await drawFicheCanvas(
+                    interaction,
+                    ressource
+                );
+                await sendNewPage(button, buffer, row, row2);
+            }
+
+            if (topic === 'mp') {
+                const { buffer, row, row2 } = await drawMpCanvas(
+                    interaction,
+                    ressource
+                );
+                await sendNewPage(button, buffer, row, row2);
+            }
+
+            if (topic === 'lab') {
+                const { buffer, row, row2 } = await drawTpCanvas(
+                    interaction,
+                    ressource
+                );
+                await sendNewPage(button, buffer, row, row2);
+            }
+        }
+
+        if (button.customId === 'ffe-rate-happy') {
+            await button.deferUpdate();
+            // send to the channel 1189276341011501197 of the guild 502931781012684818 "+1"
+            try {
+                const guild = client.guilds.cache.get('502931781012684818');
+                const channel = guild.channels.cache.get('1189276341011501197');
+                await (channel as TextChannel).send('+1');
+            } catch {}
+
+            try {
+                await button.deleteReply();
+            } catch {}
+        }
+
+        if (button.customId === 'ffe-rate-unhappy') {
+            await button.deferUpdate();
+            try {
+                const guild = client.guilds.cache.get('502931781012684818');
+                const channel = guild.channels.cache.get('1189276381297786920');
+                await (channel as TextChannel).send('-1');
+            } catch {}
+
+            try {
+                await button.deleteReply();
+            } catch {}
         }
         // ===============
     }

@@ -7,6 +7,7 @@ import {
 import drawArchiveCanvas from './src/canvas/drawingCanvas';
 import { SlashCommand } from '../../structures/SlashCommand';
 import { Canvas } from 'canvas';
+import { numbers } from './src/archive/userPages';
 
 exports.default = new SlashCommand({
     name: 'archive',
@@ -24,22 +25,22 @@ exports.default = new SlashCommand({
         // Button builders
         const mpButton = new ButtonBuilder()
             .setCustomId('mp')
-            .setEmoji('994405022894919820')
+            .setEmoji(numbers[0])
             .setStyle(ButtonStyle.Secondary);
 
         const tpButton = new ButtonBuilder()
             .setCustomId('lab')
-            .setEmoji('994405021070401576')
+            .setEmoji(numbers[1])
             .setStyle(2);
 
         const sheetsButton = new ButtonBuilder()
             .setCustomId('sheet')
-            .setEmoji('994405018167934976')
+            .setEmoji(numbers[2])
             .setStyle(2);
 
         const sendFilesButton = new ButtonBuilder()
             .setCustomId('bigbrain')
-            .setEmoji('994405016246947860')
+            .setEmoji(numbers[3])
             .setStyle(2);
 
         // Action row builder

@@ -50,7 +50,7 @@
     "ils": {
         "fr": "ils"
     },
-    "complex": {
+    "complex-numbers": {
         "fr": "complexes"
     },
     "derivatives": {
@@ -88,5 +88,11 @@
     },
     "workload": {
         "fr": "charge"
+    },
+    "differentials": {
+        "fr": "diff"
+    },
+    "Ma12": {
+        "fr": "Ma12"
     }
 }
