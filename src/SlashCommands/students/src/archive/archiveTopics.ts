@@ -147,10 +147,15 @@ const drawTopicsCanvas = async (
             return;
         }
 
+        // map back to the original topic name
+        const originalTopic = topics.find((t) => translator(t, 'fr') === topic);
+
         try {
             row.addComponents(
                 new ButtonBuilder()
-                    .setCustomId(`${topicName}-${category}-${topic}-topics`)
+                    .setCustomId(
+                        `${topicName}-${category}-${originalTopic}-topics`
+                    )
                     .setEmoji(numbers[index])
                     .setStyle(2)
             );
@@ -162,10 +167,14 @@ const drawTopicsCanvas = async (
             return;
         }
 
+        const originalTopic = topics.find((t) => translator(t, 'fr') === topic);
+
         try {
             row2.addComponents(
                 new ButtonBuilder()
-                    .setCustomId(`${topicName}-${category}-${topic}-topics`)
+                    .setCustomId(
+                        `${topicName}-${category}-${originalTopic}-topics`
+                    )
                     .setEmoji(numbers[index + 4])
                     .setStyle(2)
             );
