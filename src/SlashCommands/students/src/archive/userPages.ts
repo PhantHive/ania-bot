@@ -1,12 +1,12 @@
 import { ButtonInteraction, CacheType } from 'discord.js';
 
 // userPages.ts
-export const userPages = new Map<
+const userPages = new Map<
     string,
     { currentPage: number; totalPages: number }
 >();
 
-export const numbers = [
+const numbers = [
     '1189297626529660968',
     '1189297624046641243',
     '1189297622020792340',
@@ -17,7 +17,7 @@ export const numbers = [
     '1189297608947150858',
 ];
 
-export const sendNewPage = async (
+const sendNewPage = async (
     interaction: ButtonInteraction<CacheType>,
     buffer,
     row,
@@ -48,3 +48,5 @@ export const sendNewPage = async (
         });
     }
 };
+
+export { userPages, numbers, sendNewPage };

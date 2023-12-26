@@ -168,7 +168,7 @@ const drawArchiveCanvas = async (
     ctx.beginPath();
     ctx.font = 'italic 25px Arial';
     ctx.fillStyle = colors['lines'];
-    const credit = 'Phearion x IRIS Robotics';
+    const credit = 'phanthive.com';
     ctx.fillText(
         credit,
         canvas.width / 2 - ctx.measureText(credit).width / 2,

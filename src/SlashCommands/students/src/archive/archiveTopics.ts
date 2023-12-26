@@ -172,6 +172,9 @@ const drawTopicsCanvas = async (
         } catch (e) {}
     });
 
+    console.log(row);
+    console.log(row2);
+
     if (totalPages > 1) {
         if (currentPage > 0) {
             row.addComponents(
@@ -224,7 +227,7 @@ const showTopics = async (interaction: ButtonInteraction, field: string) => {
     const components = [];
     components.push(row);
 
-    if (row2 !== undefined && row2 !== null) {
+    if (row2.components.length > 0) {
         components.push(row2);
     }
 
