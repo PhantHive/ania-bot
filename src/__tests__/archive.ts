@@ -1,8 +1,8 @@
 import { ButtonInteraction } from 'discord.js';
-import { showTps } from '../SlashCommands/students/src/archive/archiveTp';
+import { showTps } from '../SlashCommands/students/src/archive/archiveLab';
 import { showMps } from '../SlashCommands/students/src/archive/archiveMp';
 import { showTopics } from '../SlashCommands/students/src/archive/archiveTopics';
-import { showFiches } from '../SlashCommands/students/src/archive/archiveFiches';
+import { showFiches } from '../SlashCommands/students/src/archive/archiveSheet';
 
 describe('showTps function', () => {
     it('should throw an error when guild is null', async () => {

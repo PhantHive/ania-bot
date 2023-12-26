@@ -92,10 +92,15 @@ const drawMpCanvas = async (
         if (topic == null) {
             return;
         } else {
+            // map back to the original topic name
+            const originalTopic = topics.find(
+                (t) => translator(t, 'fr') === topic
+            );
+
             try {
                 row.addComponents(
                     new ButtonBuilder()
-                        .setCustomId(`${topic}-mp`)
+                        .setCustomId(`${originalTopic}-mp`)
                         .setEmoji(numbers[index])
                         .setStyle(2)
                 );
@@ -107,10 +112,14 @@ const drawMpCanvas = async (
         if (topic == null) {
             return;
         } else {
+            const originalTopic = topics.find(
+                (t) => translator(t, 'fr') === topic
+            );
+
             try {
                 row.addComponents(
                     new ButtonBuilder()
-                        .setCustomId(`${topic}-mp`)
+                        .setCustomId(`${originalTopic}-mp`)
                         .setEmoji(numbers[index + 4])
                         .setStyle(2)
                 );

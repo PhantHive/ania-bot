@@ -45,23 +45,27 @@ const getFiles = async (interaction: ButtonInteraction, folder: string) => {
 
             await Promise.all(promises);
 
-            // ask if the user is happy with the files with two buttons: 👍 or 👎
-            const row = new ActionRowBuilder<ButtonBuilder>();
-            row.addComponents(
-                new ButtonBuilder()
-                    .setCustomId(`ffe-rate-happy`)
-                    .setLabel('👍')
-                    .setStyle(3),
-                new ButtonBuilder()
-                    .setCustomId(`ffe-rate-unhappy`)
-                    .setLabel('👎')
-                    .setStyle(4)
-            );
-            await interaction.followUp({
-                content: `Rate your experience with the FFE System:`,
-                components: [row],
-                ephemeral: true,
-            });
+            // one chance out of 10 to get  a rate message
+            const rate = Math.floor(Math.random() * 7);
+            if (rate === 2) {
+                // ask if the user is happy with the files with two buttons: 👍 or 👎
+                const row = new ActionRowBuilder<ButtonBuilder>();
+                row.addComponents(
+                    new ButtonBuilder()
+                        .setCustomId(`ffe-rate-happy`)
+                        .setLabel('👍')
+                        .setStyle(3),
+                    new ButtonBuilder()
+                        .setCustomId(`ffe-rate-unhappy`)
+                        .setLabel('👎')
+                        .setStyle(4)
+                );
+                await interaction.followUp({
+                    content: `Rate your experience with the FFE System:`,
+                    components: [row],
+                    ephemeral: true,
+                });
+            }
         }
     });
 };

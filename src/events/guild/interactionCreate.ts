@@ -7,7 +7,7 @@ import {
 import {
     drawTpCanvas,
     showTps,
-} from '../../SlashCommands/students/src/archive/archiveTp';
+} from '../../SlashCommands/students/src/archive/archiveLab';
 import {
     drawTopicsCanvas,
     showTopics,
@@ -17,7 +17,7 @@ import { join } from 'path';
 import {
     drawFicheCanvas,
     showFiches,
-} from '../../SlashCommands/students/src/archive/archiveFiches';
+} from '../../SlashCommands/students/src/archive/archiveSheet';
 import data from '../../assets/json/promos.json';
 import { addRole, writeRole, removeRoles } from './ipsaRoles/addRoles';
 import { showModal } from './emailCheck/showModal';

@@ -96,10 +96,13 @@ const drawFicheCanvas = async (
         if (topic == null) {
             return;
         }
+        // map back to the original topic name
+        const originalTopic = topics.find((t) => translator(t, 'fr') === topic);
+
         try {
             row.addComponents(
                 new ButtonBuilder()
-                    .setCustomId(`${topic}-sheet`)
+                    .setCustomId(`${originalTopic}-sheet`)
                     .setEmoji(numbers[index])
                     .setStyle(2)
             );
@@ -110,10 +113,14 @@ const drawFicheCanvas = async (
         if (topic == null) {
             return;
         }
+
+        // map back to the original topic name
+        const originalTopic = topics.find((t) => translator(t, 'fr') === topic);
+
         try {
             row2.addComponents(
                 new ButtonBuilder()
-                    .setCustomId(`${topic}-sheet`)
+                    .setCustomId(`${originalTopic}-sheet`)
                     .setEmoji(numbers[index])
                     .setStyle(2)
             );
