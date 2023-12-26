@@ -94,5 +94,56 @@
     },
     "Ma12": {
         "fr": "Ma12"
+    },
+    "electromag": {
+        "fr": "electromag"
+    },
+    "english": {
+        "fr": "anglais"
+    },
+    "plane-trajectory": {
+        "fr": "trajectoire"
+    },
+    "partiel": {
+        "fr": "partiel"
+    },
+    "kholle": {
+        "fr": "kholle"
+    },
+    "ampere": {
+        "fr": "ampere"
+    },
+    "gauss": {
+        "fr": "gauss"
+    },
+    "cholesky": {
+        "fr": "cholesky"
+    },
+    "td": {
+        "fr": "td"
+    },
+    "friction": {
+        "fr": "frottement"
+    },
+    "traction": {
+        "fr": "traction"
+    },
+    "oscillation": {
+        "fr": "oscillation"
+    },
+    "material-mech": {
+        "fr": "rdm"
+    },
+    "solid": {
+        "fr": "mecaso"
+    },
+    "fluid": {
+        "fr": "mecaflu"
+    },
+    "wave": {
+        "fr": "phOnde"
+    },
+    "thermo": {
+        "fr": "thermo"
     }
 }
