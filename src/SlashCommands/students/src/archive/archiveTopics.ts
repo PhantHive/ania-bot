@@ -5,13 +5,14 @@ import { readdirSync } from 'fs';
 import drawArchiveCanvas from '../canvas/drawingCanvas';
 import { ButtonInteraction } from 'discord.js';
 import data from '../../../../assets/json/promos.json';
+import { translator } from './translator';
 
 const getTopics = async (
     category: string,
     topicName: string,
     ressource: string
 ): Promise<string[]> => {
-    let fields = [];
+    const fields = [];
     try {
         const field_dir = readdirSync(
             join(
@@ -43,7 +44,7 @@ const getTopics = async (
                     fields.push(topic);
                 });
             }
-            if (dir_type === 'tp' && category === 'tp') {
+            if (dir_type === 'lab' && category === 'lab') {
                 readdirSync(
                     join(
                         __dirname,
@@ -54,13 +55,13 @@ const getTopics = async (
                         'assets',
                         ressource,
                         `${topicName}`,
-                        'tp'
+                        'lab'
                     )
                 ).forEach((topic) => {
                     fields.push(topic);
                 });
             }
-            if (dir_type === 'fiche' && category === 'fiche') {
+            if (dir_type === 'sheet' && category === 'sheet') {
                 readdirSync(
                     join(
                         __dirname,
@@ -71,7 +72,7 @@ const getTopics = async (
                         'assets',
                         ressource,
                         `${topicName}`,
-                        'fiche'
+                        'sheet'
                     )
                 ).forEach((topic) => {
                     fields.push(topic);
@@ -100,20 +101,26 @@ const drawTopicsCanvas = async (
         '94405009355722772',
     ];
 
-    let category: string = field.split('-')[1];
-    let topicName: string = field.split('-')[0];
+    const category: string = field.split('-')[1];
+    const topicName: string = field.split('-')[0];
 
-    let row = new ActionRowBuilder<ButtonBuilder>();
-    let canvas: Canvas;
+    const row = new ActionRowBuilder<ButtonBuilder>();
 
-    let topics: string[] = await getTopics(category, topicName, ressource);
+    const topics: string[] = await getTopics(category, topicName, ressource);
+
+    // translate every topics
+    const translatedTopics = topics.map((topic) => translator(topic, 'fr'));
 
     if (topics.length === 0) {
         return { buffer: null, row: null };
     }
 
-    canvas = await drawArchiveCanvas(title, topics);
+    const canvas: Canvas = await drawArchiveCanvas(title, translatedTopics);
     topics.forEach((topic, index) => {
+        if (topic == null) {
+            return;
+        }
+
         try {
             row.addComponents(
                 new ButtonBuilder()
@@ -134,7 +141,7 @@ const drawTopicsCanvas = async (
 
 const showTopics = async (interaction: ButtonInteraction, field: string) => {
     let ressource: string;
-    data.forEach((promo: Object) => {
+    data.forEach((promo) => {
         if (promo['id'] === interaction.guild.id) {
             ressource = promo['ressources'];
         }

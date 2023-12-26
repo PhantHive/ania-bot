@@ -18,8 +18,8 @@ exports.default = new SlashCommand({
 
         await interaction.deferReply({ ephemeral: true });
 
-        let topics = ['MP', 'TP', 'FICHES', 'ENVOYER'];
-        let canvas: Canvas = await drawArchiveCanvas('The Archive', topics);
+        const topics = ['MP', 'TP', 'FICHES', 'BIG BRAIN'];
+        const canvas: Canvas = await drawArchiveCanvas('The Archive', topics);
 
         // Button builders
         const mpButton = new ButtonBuilder()
@@ -28,17 +28,17 @@ exports.default = new SlashCommand({
             .setStyle(ButtonStyle.Secondary);
 
         const tpButton = new ButtonBuilder()
-            .setCustomId('tp')
+            .setCustomId('lab')
             .setEmoji('994405021070401576')
             .setStyle(2);
 
         const sheetsButton = new ButtonBuilder()
-            .setCustomId('sheets')
+            .setCustomId('sheet')
             .setEmoji('994405018167934976')
             .setStyle(2);
 
         const sendFilesButton = new ButtonBuilder()
-            .setCustomId('send_files')
+            .setCustomId('bigbrain')
             .setEmoji('994405016246947860')
             .setStyle(2);
 

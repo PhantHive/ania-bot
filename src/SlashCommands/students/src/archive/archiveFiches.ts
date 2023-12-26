@@ -5,9 +5,10 @@ import { readdirSync } from 'fs';
 import drawArchiveCanvas from '../canvas/drawingCanvas';
 import { ButtonInteraction } from 'discord.js';
 import data from '../../../../assets/json/promos.json';
+import { translator } from './translator';
 
 const getFiches = async (ressource: string): Promise<string[]> => {
-    let fields: string[] = [];
+    const fields: string[] = [];
 
     try {
         const sheet_dir = readdirSync(
@@ -27,7 +28,7 @@ const getFiches = async (ressource: string): Promise<string[]> => {
                 )
             );
             field_dir.forEach((dir_type) => {
-                if (dir_type === 'fiche') {
+                if (dir_type === 'sheet') {
                     fields.push(dir);
                 }
             });
@@ -50,32 +51,39 @@ const drawFicheCanvas = async (ressource) => {
         '994720845425545306',
     ];
 
-    let row = new ActionRowBuilder<ButtonBuilder>();
-    let row2 = new ActionRowBuilder<ButtonBuilder>();
-    let canvas: Canvas;
+    const row = new ActionRowBuilder<ButtonBuilder>();
+    const row2 = new ActionRowBuilder<ButtonBuilder>();
 
-    let topics: string[] = await getFiches(ressource);
+    const topics: string[] = await getFiches(ressource);
+
+    // translate every topics
+    const translatedTopics = topics.map((topic) => translator(topic, 'fr'));
 
     if (topics.length === 0) {
         return { buffer: null, row: null };
     }
 
-    console.log(topics);
-    canvas = await drawArchiveCanvas('Les fiches', topics);
+    const canvas: Canvas = await drawArchiveCanvas(
+        'Les fiches',
+        translatedTopics
+    );
 
     topics.forEach((topic, index) => {
+        if (topic == null) {
+            return;
+        }
         try {
             if (index < 4) {
                 row.addComponents(
                     new ButtonBuilder()
-                        .setCustomId(`${topic}-fiche`)
+                        .setCustomId(`${topic}-sheet`)
                         .setEmoji(numbers[index])
                         .setStyle(2)
                 );
             } else {
                 row2.addComponents(
                     new ButtonBuilder()
-                        .setCustomId(`${topic}-fiche`)
+                        .setCustomId(`${topic}-sheet`)
                         .setEmoji(numbers[index])
                         .setStyle(2)
                 );
@@ -93,7 +101,7 @@ const drawFicheCanvas = async (ressource) => {
 
 const showFiches = async (interaction: ButtonInteraction) => {
     let ressource: string;
-    data.forEach((promo: Object) => {
+    data.forEach((promo) => {
         if (promo['id'] === interaction.guild.id) {
             ressource = promo['ressources'];
         }

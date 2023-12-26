@@ -1,6 +1,7 @@
 import { ExtendedClient } from './structures/Client';
 import dbConnect from './assets/utils/mongoose';
-require('dotenv').config();
+import { config } from 'dotenv';
+config();
 
 export const client = new ExtendedClient();
 dbConnect.init();

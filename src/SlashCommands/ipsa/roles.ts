@@ -32,7 +32,7 @@ const getAssoInfo = async (
     asso: string,
     isPromo: boolean = false
 ): Promise<AssoInfo> =>
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
         /*
     [^-]*    Matches any number of characters just not -
     :\s*    Matches a : and any number of spaces
@@ -41,7 +41,7 @@ const getAssoInfo = async (
     (.*)>       Matches the rest of the string before >. (Your match)
      */
 
-        let emoji = asso.match(/(?:[^-]*:\s*){2}(.*)>/)[1];
+        const emoji = asso.match(/(?:[^-]*:\s*){2}(.*)>/)[1];
         let assoName: string | string[] = asso.match(/<:(.*):/).pop();
 
         if (!isPromo) {
@@ -67,7 +67,7 @@ exports.default = new SlashCommand({
         let menuAssoArt: AssoInfo[] = [];
         let menuPromo: AssoInfo[] = [];
 
-        let assoTech = [
+        const assoTech = [
             '<:scrypt:1136401260032036955>',
             '<:Flight:883405356389265428>',
             '<:AeroIpsa:883101019209359360>',
@@ -82,7 +82,7 @@ exports.default = new SlashCommand({
             '<:ISS:883104114618269736>',
         ];
 
-        let assoSport = [
+        const assoSport = [
             '<:BDS:883279361103503380>',
             '<:Boulips:883409159884767352>',
             '<:WAX:883269746760511498>',
@@ -94,7 +94,7 @@ exports.default = new SlashCommand({
             '<:Airsoft:883284848201039894>',
         ];
 
-        let assoArt = [
+        const assoArt = [
             '<:BDJ:889608287857803304>',
             '<:AeroSociety:883405344355799040>',
             '<:POKER:883274374759723058>',
@@ -106,7 +106,7 @@ exports.default = new SlashCommand({
             '<:Consult:883405918103044126>',
         ];
 
-        let promos = [
+        const promos = [
             '<:2022:883459321168527461>',
             '<:2023:883459278864777316>',
             '<:2024:883458166032056381>',

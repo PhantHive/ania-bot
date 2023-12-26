@@ -5,9 +5,10 @@ import { readdirSync } from 'fs';
 import drawArchiveCanvas from '../canvas/drawingCanvas';
 import { ButtonInteraction } from 'discord.js';
 import data from '../../../../assets/json/promos.json';
+import { translator } from './translator';
 
 const getMps = async (ressource: string): Promise<string[]> => {
-    let fields = [];
+    const fields = [];
     try {
         const sheet_dir = readdirSync(
             join(__dirname, '..', '..', '..', '..', 'assets', ressource)
@@ -32,6 +33,7 @@ const getMps = async (ressource: string): Promise<string[]> => {
             });
         });
     } catch (e) {
+        console.log(e);
         return [];
     }
     return fields;
@@ -48,27 +50,33 @@ const drawMpCanvas = async (ressource: string) => {
         '94405009355722772',
     ];
 
-    let row = new ActionRowBuilder<ButtonBuilder>();
-    let canvas: Canvas;
+    const row = new ActionRowBuilder<ButtonBuilder>();
 
-    let topics: string[] = await getMps(ressource);
+    const topics: string[] = await getMps(ressource);
+
+    // translate every topics
+    const translatedTopics = topics.map((topic) => translator(topic, 'fr'));
 
     if (topics.length === 0) {
         return { buffer: null, row: null };
     }
 
     console.log(topics);
-    canvas = await drawArchiveCanvas('Les mps', topics);
+    const canvas: Canvas = await drawArchiveCanvas('Les mps', translatedTopics);
 
     topics.forEach((topic, index) => {
-        try {
-            row.addComponents(
-                new ButtonBuilder()
-                    .setCustomId(`${topic}-mp`)
-                    .setEmoji(numbers[index])
-                    .setStyle(2)
-            );
-        } catch (e) {}
+        if (topic == null) {
+            return;
+        } else {
+            try {
+                row.addComponents(
+                    new ButtonBuilder()
+                        .setCustomId(`${topic}-mp`)
+                        .setEmoji(numbers[index])
+                        .setStyle(2)
+                );
+            } catch (e) {}
+        }
     });
 
     // canvas to gif as a message attachment for discord
@@ -81,7 +89,7 @@ const drawMpCanvas = async (ressource: string) => {
 
 const showMps = async (interaction: ButtonInteraction) => {
     let ressource: string;
-    data.forEach((promo: Object) => {
+    data.forEach((promo) => {
         if (promo['id'] === interaction.guild.id) {
             ressource = promo['ressources'];
         }

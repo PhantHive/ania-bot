@@ -9,9 +9,10 @@ import { join } from 'path';
 import { readdirSync } from 'fs';
 import drawArchiveCanvas from '../canvas/drawingCanvas';
 import data from '../../../../assets/json/promos.json';
+import { translator } from './translator';
 
 const getTps = async (ressource: string): Promise<string[]> => {
-    let fields = [];
+    const fields = [];
     try {
         const sheet_dir = readdirSync(
             join(__dirname, '..', '..', '..', '..', 'assets', ressource)
@@ -30,7 +31,7 @@ const getTps = async (ressource: string): Promise<string[]> => {
                 )
             );
             field_dir.forEach((dir_type: string) => {
-                if (dir_type === 'tp') {
+                if (dir_type === 'lab') {
                     fields.push(dir);
                 }
             });
@@ -52,21 +53,27 @@ const drawTpCanvas = async (ressource: string) => {
         '94405009355722772',
     ];
 
-    let row = new ActionRowBuilder<ButtonBuilder>();
-    let canvas: Canvas;
+    const row = new ActionRowBuilder<ButtonBuilder>();
 
-    let topics = await getTps(ressource);
+    const topics = await getTps(ressource);
+
+    // translate every topics
+    const translatedTopics = topics.map((topic) => translator(topic, 'fr'));
 
     if (topics.length === 0) {
         return { buffer: null, row: null };
     }
     console.log(topics);
-    canvas = await drawArchiveCanvas('Les tps', topics);
+    const canvas: Canvas = await drawArchiveCanvas('Les tps', translatedTopics);
     topics.forEach((topic, index) => {
+        if (topic == null) {
+            return;
+        }
+
         try {
             row.addComponents(
                 new ButtonBuilder()
-                    .setCustomId(`${topic}-tp`)
+                    .setCustomId(`${topic}-lab`)
                     .setEmoji(numbers[index])
                     .setStyle(2)
             );
@@ -83,7 +90,7 @@ const drawTpCanvas = async (ressource: string) => {
 
 const showTps = async (interaction: ButtonInteraction) => {
     let ressource: string;
-    data.forEach((promo: Object) => {
+    data.forEach((promo) => {
         if (promo['id'] === interaction.guild.id) {
             ressource = promo['ressources'];
         }
