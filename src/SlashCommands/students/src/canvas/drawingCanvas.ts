@@ -48,7 +48,7 @@ const drawArchiveCanvas = async (
 
     ctx.beginPath();
     ctx.globalAlpha = 0.7;
-    let gradient = ctx.createLinearGradient(0, 750, 0, 0);
+    const gradient = ctx.createLinearGradient(0, 750, 0, 0);
     gradient.addColorStop(0, colors['main']);
     gradient.addColorStop(1, colors['second']);
 
@@ -123,11 +123,11 @@ const drawArchiveCanvas = async (
 
     const availableSpace = canvas.width * 0.5;
     const firstHalf = Math.round(topics.length / 2);
-    let elementPlace = availableSpace / firstHalf / 2 + 0.25 * canvas.width;
+    const elementPlace = availableSpace / firstHalf / 2 + 0.25 * canvas.width;
 
     const coordTopics: CoordTopic[] = [];
 
-    topics.forEach((topic, index) => {
+    topics.forEach((_topic, index) => {
         // Calculate coordinate for first half
         if (index < firstHalf) {
             const x = canvas.width * 0.05;
@@ -168,7 +168,7 @@ const drawArchiveCanvas = async (
     ctx.beginPath();
     ctx.font = 'italic 25px Arial';
     ctx.fillStyle = colors['lines'];
-    let credit = 'Phearion x IRIS Robotics';
+    const credit = 'phanthive.com';
     ctx.fillText(
         credit,
         canvas.width / 2 - ctx.measureText(credit).width / 2,

@@ -5,9 +5,9 @@ import { getNews } from './src/getNews';
 import NS from '../../assets/utils/models/NewsSystem';
 
 const sendArticle = async () => {
-    let guildIpsa: Guild = client.guilds.cache.get('880491243807846450');
+    const guildIpsa: Guild = client.guilds.cache.get('880491243807846450');
     console.log('Article sending process started');
-    let data = await NS.findOne({
+    const data = await NS.findOne({
         serverId: guildIpsa.id,
     });
     if (!data) {

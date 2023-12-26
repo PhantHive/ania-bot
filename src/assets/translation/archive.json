@@ -1,0 +1,149 @@
+{
+    "sheet": {
+        "fr": "fiche"
+    },
+    "mp": {
+        "fr": "mp"
+    },
+    "aero": {
+        "fr": "aero"
+    },
+    "elec": {
+        "fr": "elec"
+    },
+    "human-science": {
+        "fr": "sh"
+    },
+    "maths": {
+        "fr": "maths"
+    },
+    "physics": {
+        "fr": "physique"
+    },
+    "lab": {
+        "fr": "tp"
+    },
+    "gas": {
+        "fr": "gaz"
+    },
+    "optics": {
+        "fr": "optique"
+    },
+    "calorimetry": {
+        "fr": "calorimetrie"
+    },
+    "comet": {
+        "fr": "comete"
+    },
+    "pendulum": {
+        "fr": "pendule"
+    },
+    "spring": {
+        "fr": "ressort"
+    },
+    "pspice": {
+        "fr": "pspice"
+    },
+    "sensor": {
+        "fr": "capteur"
+    },
+    "ils": {
+        "fr": "ils"
+    },
+    "complex-numbers": {
+        "fr": "complexes"
+    },
+    "derivatives": {
+        "fr": "derivee"
+    },
+    "fractions": {
+        "fr": "fractions"
+    },
+    "matrices": {
+        "fr": "matrices"
+    },
+    "newton": {
+        "fr": "newton"
+    },
+    "random-var": {
+        "fr": "var-aleatoire"
+    },
+    "series": {
+        "fr": "suites"
+    },
+    "taylor": {
+        "fr": "taylor"
+    },
+    "vector-spaces": {
+        "fr": "espace-vecteurs"
+    },
+    "coordinates": {
+        "fr": "coordo"
+    },
+    "harmonic": {
+        "fr": "harmonique"
+    },
+    "momentum": {
+        "fr": "choc"
+    },
+    "workload": {
+        "fr": "charge"
+    },
+    "differentials": {
+        "fr": "diff"
+    },
+    "Ma12": {
+        "fr": "Ma12"
+    },
+    "electromag": {
+        "fr": "electromag"
+    },
+    "english": {
+        "fr": "anglais"
+    },
+    "plane-trajectory": {
+        "fr": "trajectoire"
+    },
+    "partiel": {
+        "fr": "partiel"
+    },
+    "kholle": {
+        "fr": "kholle"
+    },
+    "ampere": {
+        "fr": "ampere"
+    },
+    "gauss": {
+        "fr": "gauss"
+    },
+    "cholesky": {
+        "fr": "cholesky"
+    },
+    "td": {
+        "fr": "td"
+    },
+    "friction": {
+        "fr": "frottement"
+    },
+    "traction": {
+        "fr": "traction"
+    },
+    "oscillation": {
+        "fr": "oscillation"
+    },
+    "material-mech": {
+        "fr": "rdm"
+    },
+    "solid": {
+        "fr": "mecaso"
+    },
+    "fluid": {
+        "fr": "mecaflu"
+    },
+    "wave": {
+        "fr": "phOnde"
+    },
+    "thermo": {
+        "fr": "thermo"
+    }
+}

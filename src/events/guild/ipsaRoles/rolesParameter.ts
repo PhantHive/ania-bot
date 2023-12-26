@@ -1,4 +1,4 @@
-let assoTech = [
+const assoTech = [
     '<:Scrypt:1136401260032036955>',
     '<:Flight:883405356389265428>',
     '<:AeroIpsa:883101019209359360>',
@@ -13,7 +13,7 @@ let assoTech = [
     '<:ISS:883104114618269736>',
 ];
 
-let assoSport = [
+const assoSport = [
     '<:BDS:883279361103503380>',
     '<:Boulips:883409159884767352>',
     '<:WAX:883269746760511498>',
@@ -25,7 +25,7 @@ let assoSport = [
     '<:Airsoft:883284848201039894>',
 ];
 
-let assoArt = [
+const assoArt = [
     '<:BDJ:889608287857803304>',
     '<:AeroSociety:883405344355799040>',
     '<:POKER:883274374759723058>',

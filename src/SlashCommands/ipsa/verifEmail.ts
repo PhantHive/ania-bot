@@ -1,11 +1,6 @@
 import { SlashCommand } from '../../structures/SlashCommand';
 
-import {
-    ButtonStyle,
-    ButtonBuilder,
-    ActionRowBuilder,
-    TextChannel,
-} from 'discord.js';
+import { ButtonStyle, ButtonBuilder, ActionRowBuilder } from 'discord.js';
 
 exports.default = new SlashCommand({
     name: 'email-verif',

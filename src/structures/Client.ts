@@ -1,4 +1,3 @@
-// @ts-ignore
 import {
     ApplicationCommandDataResolvable,
     Client,
@@ -66,13 +65,11 @@ export class ExtendedClient extends Client {
             `${__dirname}/../SlashCommands/*/*{.ts,.js}`.replace(/\\/g, '/')
         );
 
-        let c = 1;
         for (const filePath of commandFiles) {
             const command: CommandType = await this.importFiles(filePath);
             if (!command.name) continue;
             this.commands.set(command.name, command);
             slashCommands.push(command);
-            c++;
         }
         this.on('ready', () => {
             this.registerCommands({
@@ -87,12 +84,10 @@ export class ExtendedClient extends Client {
         const eventFiles = glob.sync(
             `${__dirname}/../events/*/*{.ts,.js}`.replace(/\\/g, '/')
         );
-        c = 1;
         for (const filePath of eventFiles) {
             const event: Event<keyof ClientEvents> =
                 await this.importFiles(filePath);
             this.on(event.event, event.run);
-            c++;
         }
     }
 }

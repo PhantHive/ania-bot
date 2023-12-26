@@ -7,6 +7,7 @@ import {
 import drawArchiveCanvas from './src/canvas/drawingCanvas';
 import { SlashCommand } from '../../structures/SlashCommand';
 import { Canvas } from 'canvas';
+import { numbers } from './src/archive/userPages';
 
 exports.default = new SlashCommand({
     name: 'archive',
@@ -18,28 +19,28 @@ exports.default = new SlashCommand({
 
         await interaction.deferReply({ ephemeral: true });
 
-        let topics = ['MP', 'TP', 'FICHES', 'ENVOYER'];
-        let canvas: Canvas = await drawArchiveCanvas('The Archive', topics);
+        const topics = ['MP', 'TP', 'FICHES', 'BIG BRAIN'];
+        const canvas: Canvas = await drawArchiveCanvas('The Archive', topics);
 
         // Button builders
         const mpButton = new ButtonBuilder()
             .setCustomId('mp')
-            .setEmoji('994405022894919820')
+            .setEmoji(numbers[0])
             .setStyle(ButtonStyle.Secondary);
 
         const tpButton = new ButtonBuilder()
-            .setCustomId('tp')
-            .setEmoji('994405021070401576')
+            .setCustomId('lab')
+            .setEmoji(numbers[1])
             .setStyle(2);
 
         const sheetsButton = new ButtonBuilder()
-            .setCustomId('sheets')
-            .setEmoji('994405018167934976')
+            .setCustomId('sheet')
+            .setEmoji(numbers[2])
             .setStyle(2);
 
         const sendFilesButton = new ButtonBuilder()
-            .setCustomId('send_files')
-            .setEmoji('994405016246947860')
+            .setCustomId('bigbrain')
+            .setEmoji(numbers[3])
             .setStyle(2);
 
         // Action row builder

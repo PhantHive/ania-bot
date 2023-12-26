@@ -7,7 +7,6 @@ exports.default = new SlashCommand({
     description: 'Change a field in the database',
     userPermissions: ['Administrator'],
     run: async ({ interaction }) => {
-
         await interaction.deferReply();
 
         // for each document that contains: 28, 27, 26, 25, 24 change them to 2028, 2027, 2026, 2025, 2024

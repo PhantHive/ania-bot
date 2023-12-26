@@ -1,25 +1,25 @@
 import { Canvas } from 'canvas';
 import {
     AttachmentBuilder,
-    ButtonBuilder,
     ActionRowBuilder,
+    ButtonBuilder,
+    ButtonInteraction,
     CacheType,
 } from 'discord.js';
 import { join } from 'path';
 import { readdirSync } from 'fs';
 import drawArchiveCanvas from '../canvas/drawingCanvas';
-import { ButtonInteraction } from 'discord.js';
 import data from '../../../../assets/json/promos.json';
 import { translator } from './translator';
 import { numbers, userPages } from './userPages';
 
-const getMps = async (ressource: string): Promise<string[]> => {
+const getTps = async (ressource: string): Promise<string[]> => {
     const fields = [];
     try {
         const sheet_dir = readdirSync(
             join(__dirname, '..', '..', '..', '..', 'assets', ressource)
         );
-        sheet_dir.forEach((dir) => {
+        sheet_dir.forEach((dir: string) => {
             const field_dir = readdirSync(
                 join(
                     __dirname,
@@ -32,27 +32,26 @@ const getMps = async (ressource: string): Promise<string[]> => {
                     `${dir}`
                 )
             );
-            field_dir.forEach((dir_type) => {
-                if (dir_type === 'mp') {
+            field_dir.forEach((dir_type: string) => {
+                if (dir_type === 'lab') {
                     fields.push(dir);
                 }
             });
         });
     } catch (e) {
-        console.log(e);
         return [];
     }
     return fields;
 };
 
-const drawMpCanvas = async (
+const drawTpCanvas = async (
     interaction: ButtonInteraction<CacheType>,
     ressource: string
 ) => {
     const row = new ActionRowBuilder<ButtonBuilder>();
     const row2 = new ActionRowBuilder<ButtonBuilder>();
 
-    const topics: string[] = await getMps(ressource);
+    const topics = await getTps(ressource);
 
     // translate every topics
     const translatedTopics = topics.map((topic) => translator(topic, 'fr'));
@@ -60,9 +59,7 @@ const drawMpCanvas = async (
     if (topics.length === 0) {
         return { buffer: null, row: null };
     }
-
     const totalPages = Math.ceil(translatedTopics.length / 8);
-
     if (!userPages.has(interaction.user.id)) {
         userPages.set(interaction.user.id, { currentPage: 0, totalPages });
     } else {
@@ -75,7 +72,6 @@ const drawMpCanvas = async (
         currentPage * 8,
         (currentPage + 1) * 8
     );
-    const canvas: Canvas = await drawArchiveCanvas('Les mps', translatedTopics);
 
     let currentTopicsRow1;
     let currentTopicsRow2;
@@ -88,50 +84,48 @@ const drawMpCanvas = async (
         currentTopicsRow2 = [];
     }
 
+    const canvas: Canvas = await drawArchiveCanvas('Les tps', translatedTopics);
     currentTopicsRow1.forEach((topic, index) => {
         if (topic == null) {
             return;
-        } else {
-            // map back to the original topic name
-            const originalTopic = topics.find(
-                (t) => translator(t, 'fr') === topic
-            );
-
-            try {
-                row.addComponents(
-                    new ButtonBuilder()
-                        .setCustomId(`${originalTopic}-mp`)
-                        .setEmoji(numbers[index])
-                        .setStyle(2)
-                );
-            } catch (e) {}
         }
+
+        // map back to the original topic name
+        const originalTopic = topics.find((t) => translator(t, 'fr') === topic);
+
+        try {
+            row.addComponents(
+                new ButtonBuilder()
+                    .setCustomId(`${originalTopic}-lab`)
+                    .setEmoji(numbers[index])
+                    .setStyle(2)
+            );
+        } catch (e) {}
     });
 
     currentTopicsRow2.forEach((topic, index) => {
         if (topic == null) {
             return;
-        } else {
-            const originalTopic = topics.find(
-                (t) => translator(t, 'fr') === topic
-            );
-
-            try {
-                row.addComponents(
-                    new ButtonBuilder()
-                        .setCustomId(`${originalTopic}-mp`)
-                        .setEmoji(numbers[index + 4])
-                        .setStyle(2)
-                );
-            } catch (e) {}
         }
+
+        // map back to the original topic name
+        const originalTopic = topics.find((t) => translator(t, 'fr') === topic);
+
+        try {
+            row2.addComponents(
+                new ButtonBuilder()
+                    .setCustomId(`${originalTopic}-lab`)
+                    .setEmoji(numbers[index + 4])
+                    .setStyle(2)
+            );
+        } catch (e) {}
     });
 
     if (totalPages > 1) {
         if (currentPage > 0) {
             row.addComponents(
                 new ButtonBuilder()
-                    .setCustomId('_mp-previous')
+                    .setCustomId('_topic-previous')
                     .setLabel('👈')
                     .setStyle(2)
             );
@@ -140,7 +134,7 @@ const drawMpCanvas = async (
         if (currentPage < totalPages - 1) {
             row2.addComponents(
                 new ButtonBuilder()
-                    .setCustomId('_mp-next')
+                    .setCustomId('_topic-next')
                     .setLabel('👉')
                     .setStyle(2)
             );
@@ -155,7 +149,7 @@ const drawMpCanvas = async (
     return { buffer, row, row2 };
 };
 
-const showMps = async (interaction: ButtonInteraction) => {
+const showTps = async (interaction: ButtonInteraction) => {
     let ressource: string;
     data.forEach((promo) => {
         if (promo['id'] === interaction.guild.id) {
@@ -163,11 +157,11 @@ const showMps = async (interaction: ButtonInteraction) => {
         }
     });
 
-    const { buffer, row, row2 } = await drawMpCanvas(interaction, ressource);
+    const { buffer, row, row2 } = await drawTpCanvas(interaction, ressource);
 
     if (buffer === null || row === null) {
         return interaction.update({
-            content: "Aucun **mp** n'a été trouvé",
+            content: "Aucun **tp** n'a été trouvé",
         });
     }
 
@@ -189,4 +183,4 @@ const showMps = async (interaction: ButtonInteraction) => {
     }
 };
 
-export { drawMpCanvas, showMps };
+export { drawTpCanvas, showTps };

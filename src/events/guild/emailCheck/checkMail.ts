@@ -29,7 +29,7 @@ const verification = class Verif {
     async setupMailData(mdata): Promise<string> {
         // All IPSA guilds that you want to auto-assign roles "IPSAlien".
         // Only if your guild contains a role named "IPSAlien"
-        let guilds = [
+        const guilds = [
             '880491243807846450',
             '1123290381711311010',
             '984924408529432596',
@@ -41,9 +41,9 @@ const verification = class Verif {
         const mailVerifFlattened = {};
 
         // Loop through each city
-        for (let city in mailVerif) {
+        for (const city in mailVerif) {
             // Loop through each degree type
-            for (let degreeType in mailVerif[city]) {
+            for (const degreeType in mailVerif[city]) {
                 // Add promo years directly to flattened structure
                 mailVerifFlattened[`${city}-${degreeType}`] =
                     mailVerif[city][degreeType];
@@ -53,11 +53,11 @@ const verification = class Verif {
         let mailFound = false;
 
         // Simple iteration over flattened data
-        for (let key in mailVerifFlattened) {
+        for (const key in mailVerifFlattened) {
             // Directly access promo years
             const promoDict = mailVerifFlattened[key];
 
-            for (let promoYear of Object.keys(promoDict)) {
+            for (const promoYear of Object.keys(promoDict)) {
                 console.log(promoDict[promoYear]);
                 // if it's empty, skip
                 if (promoDict[promoYear].length === 0) {
@@ -90,13 +90,13 @@ const verification = class Verif {
 
         if (mdata.email === '') {
             if (this.mail) {
-                let name = this.mail.substring(0, this.mail.indexOf('@'));
-                let firstName = name.substring(0, this.mail.indexOf('.'));
-                let surName = name.substring(this.mail.indexOf('.') + 1);
-                let correctName =
+                const name = this.mail.substring(0, this.mail.indexOf('@'));
+                const firstName = name.substring(0, this.mail.indexOf('.'));
+                const surName = name.substring(this.mail.indexOf('.') + 1);
+                const correctName =
                     firstName.charAt(0).toUpperCase() + firstName.slice(1);
-                let correctSurname = surName.toUpperCase();
-                let fullName = correctSurname + ' ' + correctName;
+                const correctSurname = surName.toUpperCase();
+                const fullName = correctSurname + ' ' + correctName;
 
                 // ---------------------
                 // database registration
@@ -141,17 +141,17 @@ const verification = class Verif {
                 );
 
                 let role: Role;
-                let registeredServer = [];
+                const registeredServer = [];
 
-                guilds.forEach((serv, index) => {
+                guilds.forEach((serv) => {
                     const check = async () => {
                         new Promise((resolve) => setTimeout(resolve, 2500));
 
-                        let guild = this.client.guilds.cache.get(serv);
+                        const guild = this.client.guilds.cache.get(serv);
 
                         if (guild) {
                             // get user id
-                            let member = guild.members.cache.get(
+                            const member = guild.members.cache.get(
                                 this.interaction.user.id
                             );
                             if (member) {
@@ -225,7 +225,7 @@ const verification = class Verif {
                     }\n A bientôt!`;
                 }
 
-                let registeredServerTxt = registeredServer.join('\n');
+                const registeredServerTxt = registeredServer.join('\n');
                 return (
                     `***${fullName}*** Tu appartiens à la promo ***${
                         this.promo

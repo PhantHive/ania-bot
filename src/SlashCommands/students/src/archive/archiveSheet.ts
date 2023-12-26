@@ -1,8 +1,8 @@
 import { Canvas } from 'canvas';
 import {
     AttachmentBuilder,
-    ButtonBuilder,
     ActionRowBuilder,
+    ButtonBuilder,
     CacheType,
 } from 'discord.js';
 import { join } from 'path';
@@ -13,8 +13,9 @@ import data from '../../../../assets/json/promos.json';
 import { translator } from './translator';
 import { numbers, userPages } from './userPages';
 
-const getMps = async (ressource: string): Promise<string[]> => {
-    const fields = [];
+const getFiches = async (ressource: string): Promise<string[]> => {
+    const fields: string[] = [];
+
     try {
         const sheet_dir = readdirSync(
             join(__dirname, '..', '..', '..', '..', 'assets', ressource)
@@ -33,29 +34,33 @@ const getMps = async (ressource: string): Promise<string[]> => {
                 )
             );
             field_dir.forEach((dir_type) => {
-                if (dir_type === 'mp') {
+                if (dir_type === 'sheet') {
                     fields.push(dir);
                 }
             });
         });
     } catch (e) {
-        console.log(e);
         return [];
     }
     return fields;
 };
 
-const drawMpCanvas = async (
+const drawFicheCanvas = async (
     interaction: ButtonInteraction<CacheType>,
     ressource: string
 ) => {
     const row = new ActionRowBuilder<ButtonBuilder>();
     const row2 = new ActionRowBuilder<ButtonBuilder>();
 
-    const topics: string[] = await getMps(ressource);
+    const topics: string[] = await getFiches(ressource);
 
     // translate every topics
     const translatedTopics = topics.map((topic) => translator(topic, 'fr'));
+
+    const canvas: Canvas = await drawArchiveCanvas(
+        'Les fiches',
+        translatedTopics
+    );
 
     if (topics.length === 0) {
         return { buffer: null, row: null };
@@ -75,7 +80,6 @@ const drawMpCanvas = async (
         currentPage * 8,
         (currentPage + 1) * 8
     );
-    const canvas: Canvas = await drawArchiveCanvas('Les mps', translatedTopics);
 
     let currentTopicsRow1;
     let currentTopicsRow2;
@@ -91,47 +95,43 @@ const drawMpCanvas = async (
     currentTopicsRow1.forEach((topic, index) => {
         if (topic == null) {
             return;
-        } else {
-            // map back to the original topic name
-            const originalTopic = topics.find(
-                (t) => translator(t, 'fr') === topic
-            );
-
-            try {
-                row.addComponents(
-                    new ButtonBuilder()
-                        .setCustomId(`${originalTopic}-mp`)
-                        .setEmoji(numbers[index])
-                        .setStyle(2)
-                );
-            } catch (e) {}
         }
+        // map back to the original topic name
+        const originalTopic = topics.find((t) => translator(t, 'fr') === topic);
+
+        try {
+            row.addComponents(
+                new ButtonBuilder()
+                    .setCustomId(`${originalTopic}-sheet`)
+                    .setEmoji(numbers[index])
+                    .setStyle(2)
+            );
+        } catch (e) {}
     });
 
     currentTopicsRow2.forEach((topic, index) => {
         if (topic == null) {
             return;
-        } else {
-            const originalTopic = topics.find(
-                (t) => translator(t, 'fr') === topic
-            );
-
-            try {
-                row.addComponents(
-                    new ButtonBuilder()
-                        .setCustomId(`${originalTopic}-mp`)
-                        .setEmoji(numbers[index + 4])
-                        .setStyle(2)
-                );
-            } catch (e) {}
         }
+
+        // map back to the original topic name
+        const originalTopic = topics.find((t) => translator(t, 'fr') === topic);
+
+        try {
+            row2.addComponents(
+                new ButtonBuilder()
+                    .setCustomId(`${originalTopic}-sheet`)
+                    .setEmoji(numbers[index])
+                    .setStyle(2)
+            );
+        } catch (e) {}
     });
 
     if (totalPages > 1) {
         if (currentPage > 0) {
             row.addComponents(
                 new ButtonBuilder()
-                    .setCustomId('_mp-previous')
+                    .setCustomId('_sheet-previous')
                     .setLabel('👈')
                     .setStyle(2)
             );
@@ -140,7 +140,7 @@ const drawMpCanvas = async (
         if (currentPage < totalPages - 1) {
             row2.addComponents(
                 new ButtonBuilder()
-                    .setCustomId('_mp-next')
+                    .setCustomId('_sheet-next')
                     .setLabel('👉')
                     .setStyle(2)
             );
@@ -155,7 +155,7 @@ const drawMpCanvas = async (
     return { buffer, row, row2 };
 };
 
-const showMps = async (interaction: ButtonInteraction) => {
+const showFiches = async (interaction: ButtonInteraction) => {
     let ressource: string;
     data.forEach((promo) => {
         if (promo['id'] === interaction.guild.id) {
@@ -163,11 +163,11 @@ const showMps = async (interaction: ButtonInteraction) => {
         }
     });
 
-    const { buffer, row, row2 } = await drawMpCanvas(interaction, ressource);
+    const { buffer, row, row2 } = await drawFicheCanvas(interaction, ressource);
 
     if (buffer === null || row === null) {
         return interaction.update({
-            content: "Aucun **mp** n'a été trouvé",
+            content: "Aucune **fiche** n'a été trouvé",
         });
     }
 
@@ -189,4 +189,4 @@ const showMps = async (interaction: ButtonInteraction) => {
     }
 };
 
-export { drawMpCanvas, showMps };
+export { drawFicheCanvas, showFiches };

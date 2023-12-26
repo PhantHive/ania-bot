@@ -63,12 +63,12 @@ const addRole = async (
 ): Promise<string> => {
     return new Promise(async (resolve, reject) => {
         // add the role to the user
-        let member: GuildMember = interaction.guild.members.cache.find(
+        const member: GuildMember = interaction.guild.members.cache.find(
             (member) => member.id === user
         );
         // check if Student exists
         const studentData = await MV.findOne({ discordId: user });
-        let roles = member.roles.cache.map(
+        const roles = member.roles.cache.map(
             (role: Role) => `<:${role.name}:${role.id}>`
         );
         if (!studentData)
@@ -89,7 +89,7 @@ const addRole = async (
 
         // filter out any role that is not in the lists using roleInstance
         assoTech.forEach((role) => {
-            let roleName = role
+            const roleName = role
                 .match(/:(.*)>/)
                 .pop()
                 .split(':')[0];
@@ -98,7 +98,7 @@ const addRole = async (
             }
         });
         assoSport.forEach((role) => {
-            let roleName = role
+            const roleName = role
                 .match(/:(.*)>/)
                 .pop()
                 .split(':')[0];
@@ -107,7 +107,7 @@ const addRole = async (
             }
         });
         assoArt.forEach((role) => {
-            let roleName = role
+            const roleName = role
                 .match(/:(.*)>/)
                 .pop()
                 .split(':')[0];
@@ -116,7 +116,7 @@ const addRole = async (
             }
         });
         menuPromo.forEach((role) => {
-            let roleName = role
+            const roleName = role
                 .match(/:(.*)>/)
                 .pop()
                 .split(':')[0];
@@ -127,7 +127,7 @@ const addRole = async (
 
         // filter out any role that user already have
         rolesFiltered = rolesFiltered.filter((role) => {
-            let roleName = role
+            const roleName = role
                 .match(/:(.*)>/)
                 .pop()
                 .split(':')[0];
@@ -141,13 +141,13 @@ const addRole = async (
         let extraInfo: string = '';
         // send a message to the user with the roles added
         rolesFiltered.forEach((role) => {
-            let roleName: string = role
+            const roleName: string = role
                 .match(/:(.*)>/)
                 .pop()
                 .split(':')[0];
             try {
                 // fetch role by name and add it to the user
-                let role = interaction.guild.roles.cache.find(
+                const role = interaction.guild.roles.cache.find(
                     (role) => role.name.toLowerCase() === roleName.toLowerCase()
                 );
                 if (role) {
@@ -173,11 +173,11 @@ const removeRoles = async (
     return new Promise(async (resolve, reject) => {
         // remove the role to the user that match with the lists above
         // check all roles that a user have
-        let member: GuildMember = interaction.guild.members.cache.find(
+        const member: GuildMember = interaction.guild.members.cache.find(
             (member: GuildMember) => member.id === user
         );
         // let roles where you map role to  <:${role.name}:${role.id}> except if the role doesn't exist anymore
-        let roles = member.roles.cache.map(
+        const roles = member.roles.cache.map(
             (role: Role) => `<:${role.name}:${role.id}>`
         );
 
@@ -198,7 +198,7 @@ const removeRoles = async (
         let rolesFiltered: string[] = [];
 
         assoTech.forEach((role) => {
-            let roleName = role
+            const roleName = role
                 .match(/:(.*)>/)
                 .pop()
                 .split(':')[0];
@@ -207,7 +207,7 @@ const removeRoles = async (
             }
         });
         assoSport.forEach((role) => {
-            let roleName = role
+            const roleName = role
                 .match(/:(.*)>/)
                 .pop()
                 .split(':')[0];
@@ -216,7 +216,7 @@ const removeRoles = async (
             }
         });
         assoArt.forEach((role) => {
-            let roleName = role
+            const roleName = role
                 .match(/:(.*)>/)
                 .pop()
                 .split(':')[0];
@@ -225,7 +225,7 @@ const removeRoles = async (
             }
         });
         menuPromo.forEach((role) => {
-            let roleName = role
+            const roleName = role
                 .match(/:(.*)>/)
                 .pop()
                 .split(':')[0];
@@ -236,7 +236,7 @@ const removeRoles = async (
 
         // filter only roles that user have
         rolesFiltered = rolesFiltered.filter((role) => {
-            let roleName = role
+            const roleName = role
                 .match(/:(.*)>/)
                 .pop()
                 .split(':')[0];
@@ -252,12 +252,12 @@ const removeRoles = async (
         }
 
         rolesFiltered.forEach((role) => {
-            let roleName = role
+            const roleName = role
                 .match(/:(.*)>/)
                 .pop()
                 .split(':')[0];
             try {
-                let role: Role = interaction.guild.roles.cache.find(
+                const role: Role = interaction.guild.roles.cache.find(
                     (role: Role) =>
                         role.name.toLowerCase() === roleName.toLowerCase()
                 );
