@@ -11,7 +11,7 @@ import drawArchiveCanvas from '../canvas/drawingCanvas';
 import { ButtonInteraction } from 'discord.js';
 import data from '../../../../assets/json/promos.json';
 import { translator } from './translator';
-import { numbers, userPages } from './userPages';
+import { numbers } from './userPages';
 
 const getTopics = async (
     category: string,
@@ -96,7 +96,8 @@ const drawTopicsCanvas = async (
     interaction: ButtonInteraction<CacheType>,
     title: string,
     field: string,
-    ressource: string
+    ressource: string,
+    currentPage: number = 0
 ) => {
     const category: string = field.split('-')[1];
     const topicName: string = field.split('-')[0];
@@ -114,15 +115,7 @@ const drawTopicsCanvas = async (
     }
 
     const totalPages = Math.ceil(translatedTopics.length / 8);
-    console.log(interaction.user.id);
-    if (!userPages.has(interaction.user.id)) {
-        userPages.set(interaction.user.id, { currentPage: 0, totalPages });
-    } else {
-        const userPage = userPages.get(interaction.user.id);
-        userPages.set(interaction.user.id, { ...userPage, totalPages });
-    }
 
-    const { currentPage } = userPages.get(interaction.user.id);
     const currentTopics = translatedTopics.slice(
         currentPage * 8,
         (currentPage + 1) * 8
@@ -188,7 +181,9 @@ const drawTopicsCanvas = async (
         if (currentPage > 0) {
             row.addComponents(
                 new ButtonBuilder()
-                    .setCustomId(`${topicName}-${category}_topic-previous`)
+                    .setCustomId(
+                        `${topicName}-${category}_topic-previous-${currentPage}`
+                    )
                     .setLabel('👈')
                     .setStyle(2)
             );
@@ -197,7 +192,9 @@ const drawTopicsCanvas = async (
         if (currentPage < totalPages - 1) {
             row2.addComponents(
                 new ButtonBuilder()
-                    .setCustomId(`${topicName}-${category}_topic-next`)
+                    .setCustomId(
+                        `${topicName}-${category}_topic-next-${currentPage}`
+                    )
                     .setLabel('👉')
                     .setStyle(2)
             );
