@@ -11,7 +11,7 @@ import { readdirSync } from 'fs';
 import drawArchiveCanvas from '../canvas/drawingCanvas';
 import data from '../../../../assets/json/promos.json';
 import { translator } from './translator';
-import { numbers, userPages } from './userPages';
+import { numbers } from './userPages';
 
 const getTps = async (ressource: string): Promise<string[]> => {
     const fields = [];
@@ -46,7 +46,8 @@ const getTps = async (ressource: string): Promise<string[]> => {
 
 const drawTpCanvas = async (
     interaction: ButtonInteraction<CacheType>,
-    ressource: string
+    ressource: string,
+    currentPage: number = 0
 ) => {
     const row = new ActionRowBuilder<ButtonBuilder>();
     const row2 = new ActionRowBuilder<ButtonBuilder>();
@@ -60,14 +61,7 @@ const drawTpCanvas = async (
         return { buffer: null, row: null };
     }
     const totalPages = Math.ceil(translatedTopics.length / 8);
-    if (!userPages.has(interaction.user.id)) {
-        userPages.set(interaction.user.id, { currentPage: 0, totalPages });
-    } else {
-        const userPage = userPages.get(interaction.user.id);
-        userPages.set(interaction.user.id, { ...userPage, totalPages });
-    }
 
-    const { currentPage } = userPages.get(interaction.user.id);
     const currentTopics = translatedTopics.slice(
         currentPage * 8,
         (currentPage + 1) * 8
@@ -125,7 +119,7 @@ const drawTpCanvas = async (
         if (currentPage > 0) {
             row.addComponents(
                 new ButtonBuilder()
-                    .setCustomId('_topic-previous')
+                    .setCustomId(`_topic-previous-${currentPage}`)
                     .setLabel('👈')
                     .setStyle(2)
             );
@@ -134,7 +128,7 @@ const drawTpCanvas = async (
         if (currentPage < totalPages - 1) {
             row2.addComponents(
                 new ButtonBuilder()
-                    .setCustomId('_topic-next')
+                    .setCustomId(`_topic-next-${currentPage}`)
                     .setLabel('👉')
                     .setStyle(2)
             );

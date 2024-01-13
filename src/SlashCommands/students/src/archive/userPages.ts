@@ -1,10 +1,5 @@
-import { ButtonInteraction, CacheType } from 'discord.js';
-
 // userPages.ts
-const userPages = new Map<
-    string,
-    { currentPage: number; totalPages: number }
->();
+import { ButtonInteraction, ActionRowBuilder, ButtonBuilder } from 'discord.js';
 
 const numbers = [
     '1189297626529660968',
@@ -18,35 +13,19 @@ const numbers = [
 ];
 
 const sendNewPage = async (
-    interaction: ButtonInteraction<CacheType>,
-    buffer,
-    row,
-    row2
-) => {
-    const components = [];
-    components.push(row);
-
-    console.log(row2);
-
-    if (row2 !== null && row2 !== undefined) {
-        if (row2.components.length > 0) {
-            components.push(row2);
-        }
-    }
-
+    interaction: ButtonInteraction,
+    buffer: Buffer,
+    row: ActionRowBuilder<ButtonBuilder>,
+    row2: ActionRowBuilder<ButtonBuilder>
+): Promise<void> => {
+    // Now, send or update the interaction and filter any empty rows
+    const components = [row, row2].filter((r) => r.components.length > 0);
     try {
-        await interaction.update({
-            content: '',
-            files: [buffer],
-            components: components,
-        });
-    } catch (e) {
-        await interaction.reply({
-            content: '',
-            files: [buffer],
-            components: components,
-        });
+        await interaction.update({ content: '', files: [buffer], components });
+    } catch (error) {
+        console.error('Error updating the interaction:', error);
+        // Handle the error appropriately
     }
 };
 
-export { userPages, numbers, sendNewPage };
+export { numbers, sendNewPage };

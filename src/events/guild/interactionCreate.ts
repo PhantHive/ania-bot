@@ -31,10 +31,7 @@ import {
     StringSelectMenuInteraction,
     TextChannel,
 } from 'discord.js';
-import {
-    sendNewPage,
-    userPages,
-} from '../../SlashCommands/students/src/archive/userPages';
+import { sendNewPage } from '../../SlashCommands/students/src/archive/userPages';
 
 export default new Event('interactionCreate', async (interaction) => {
     if (!interaction.inGuild()) {
@@ -88,7 +85,6 @@ export default new Event('interactionCreate', async (interaction) => {
 
     if (interaction.isButton()) {
         const button = interaction as ButtonInteraction;
-        const userId = button.user.id;
 
         // ===============
         // IPSA EMAIL SYSTEM
@@ -237,32 +233,19 @@ export default new Event('interactionCreate', async (interaction) => {
         }
 
         if (
-            button.customId.endsWith('-previous') ||
-            button.customId.endsWith('-next')
+            button.customId.includes('-previous') ||
+            button.customId.includes('-next')
         ) {
-            if (!userPages.has(userId)) {
-                userPages.set(userId, {
-                    currentPage: 0,
-                    totalPages: 0,
-                });
-            }
-            const { currentPage, totalPages } = userPages.get(userId);
+            // get number of page it's after the last "-"
+            const currentPage = Number(button.customId.split('-').pop());
+            // get if the string contains "previous" or "next" regex
+            const action = button.customId.match(/previous|next/)[0];
 
-            //  reduce the current page by one if the button is previous
-            if (button.customId.endsWith('-previous')) {
-                userPages.set(interaction.user.id, {
-                    currentPage: currentPage - 1,
-                    totalPages,
-                });
-            }
+            const newPage: number =
+                action === 'previous' ? currentPage - 1 : currentPage + 1;
 
-            // increase the current page by one if the button is next
-            if (button.customId.endsWith('-next')) {
-                userPages.set(interaction.user.id, {
-                    currentPage: currentPage + 1,
-                    totalPages,
-                });
-            }
+            console.log('newPage: ' + newPage);
+            console.log(action);
 
             // Redraw the buttons
             let ressource: string;
@@ -281,7 +264,8 @@ export default new Event('interactionCreate', async (interaction) => {
                     interaction,
                     'Les modules',
                     field,
-                    ressource
+                    ressource,
+                    newPage
                 );
                 console.log('row: ' + row);
                 await sendNewPage(button, buffer, row, row2);
@@ -290,7 +274,8 @@ export default new Event('interactionCreate', async (interaction) => {
             if (topic === 'sheet') {
                 const { buffer, row, row2 } = await drawFicheCanvas(
                     interaction,
-                    ressource
+                    ressource,
+                    newPage
                 );
                 await sendNewPage(button, buffer, row, row2);
             }
@@ -298,7 +283,8 @@ export default new Event('interactionCreate', async (interaction) => {
             if (topic === 'mp') {
                 const { buffer, row, row2 } = await drawMpCanvas(
                     interaction,
-                    ressource
+                    ressource,
+                    newPage
                 );
                 await sendNewPage(button, buffer, row, row2);
             }
@@ -306,7 +292,8 @@ export default new Event('interactionCreate', async (interaction) => {
             if (topic === 'lab') {
                 const { buffer, row, row2 } = await drawTpCanvas(
                     interaction,
-                    ressource
+                    ressource,
+                    newPage
                 );
                 await sendNewPage(button, buffer, row, row2);
             }
