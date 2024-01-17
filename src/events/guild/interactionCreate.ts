@@ -186,9 +186,9 @@ export default new Event('interactionCreate', async (interaction) => {
         }
 
         if (
-            button.customId.endsWith('-mp') ||
-            button.customId.endsWith('-lab') ||
-            button.customId.endsWith('-sheet')
+            button.customId.endsWith('_mp') ||
+            button.customId.endsWith('_lab') ||
+            button.customId.endsWith('_sheet')
         ) {
             await showTopics(button, button.customId);
         }
@@ -207,10 +207,19 @@ export default new Event('interactionCreate', async (interaction) => {
                     ressource = promo['ressources'];
                 }
             });
-            console.log(button.customId);
-            const topic = button.customId.split('-')[0];
-            const category = button.customId.split('-')[1];
-            const subject = button.customId.split('-')[2];
+
+            const lastDash = button.customId.lastIndexOf('-');
+            const lastUnderscore = button.customId.lastIndexOf('_');
+            // use regex to get the topic name before the first "_"
+            const topic = button.customId.split('_')[0];
+            // use regex to get the category name between the first "_" and the last "-"
+            const category = button.customId.split('_')[1].split('-')[0];
+            // use regex to get the subject name before the last "_" and after the last "-"
+            const subject = button.customId.slice(lastUnderscore + 1, lastDash);
+
+            console.log('topic: ' + topic);
+            console.log('category: ' + category);
+            console.log('subject: ' + subject);
 
             // 'fr' should be changed in the future!! to be adapted to server automatically.
             const folder = join(
@@ -243,10 +252,6 @@ export default new Event('interactionCreate', async (interaction) => {
 
             const newPage: number =
                 action === 'previous' ? currentPage - 1 : currentPage + 1;
-
-            console.log('newPage: ' + newPage);
-            console.log(action);
-
             // Redraw the buttons
             let ressource: string;
             data.forEach((promo) => {
@@ -255,11 +260,9 @@ export default new Event('interactionCreate', async (interaction) => {
                 }
             });
 
-            // topic is between "_" and "-" in the string
-            const topic = button.customId.split('_')[1].split('-')[0];
-            if (topic === 'topic') {
-                const field = button.customId.split('_')[0];
-                console.log('category: ' + field);
+            const category = button.customId.match(/(?<=_)([^_]+?)(?=-)/)[0];
+            if (category === 'topic') {
+                const field = button.customId.match(/(.+)_/)[1];
                 const { buffer, row, row2 } = await drawTopicsCanvas(
                     interaction,
                     'Les modules',
@@ -267,11 +270,10 @@ export default new Event('interactionCreate', async (interaction) => {
                     ressource,
                     newPage
                 );
-                console.log('row: ' + row);
                 await sendNewPage(button, buffer, row, row2);
             }
 
-            if (topic === 'sheet') {
+            if (category === 'sheet') {
                 const { buffer, row, row2 } = await drawFicheCanvas(
                     interaction,
                     ressource,
@@ -280,7 +282,7 @@ export default new Event('interactionCreate', async (interaction) => {
                 await sendNewPage(button, buffer, row, row2);
             }
 
-            if (topic === 'mp') {
+            if (category === 'mp') {
                 const { buffer, row, row2 } = await drawMpCanvas(
                     interaction,
                     ressource,
@@ -289,7 +291,7 @@ export default new Event('interactionCreate', async (interaction) => {
                 await sendNewPage(button, buffer, row, row2);
             }
 
-            if (topic === 'lab') {
+            if (category === 'lab') {
                 const { buffer, row, row2 } = await drawTpCanvas(
                     interaction,
                     ressource,

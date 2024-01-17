@@ -145,5 +145,8 @@
     },
     "thermo": {
         "fr": "thermo"
+    },
+    "global": {
+        "fr": "global"
     }
 }

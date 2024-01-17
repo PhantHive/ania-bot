@@ -95,7 +95,7 @@ const drawFicheCanvas = async (
         try {
             row.addComponents(
                 new ButtonBuilder()
-                    .setCustomId(`${originalTopic}-sheet`)
+                    .setCustomId(`${originalTopic}_sheet`)
                     .setEmoji(numbers[index])
                     .setStyle(2)
             );
@@ -113,7 +113,7 @@ const drawFicheCanvas = async (
         try {
             row2.addComponents(
                 new ButtonBuilder()
-                    .setCustomId(`${originalTopic}-sheet`)
+                    .setCustomId(`${originalTopic}_sheet`)
                     .setEmoji(numbers[index])
                     .setStyle(2)
             );

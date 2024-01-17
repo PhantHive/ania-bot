@@ -99,8 +99,12 @@ const drawTopicsCanvas = async (
     ressource: string,
     currentPage: number = 0
 ) => {
-    const category: string = field.split('-')[1];
-    const topicName: string = field.split('-')[0];
+    const lastDash = field.lastIndexOf('_');
+    const category = String.prototype.slice.call(field, lastDash + 1);
+    const topicName = String.prototype.slice.call(field, 0, lastDash);
+
+    console.log('category: ', category);
+    console.log('topicName: ', topicName);
 
     const row = new ActionRowBuilder<ButtonBuilder>();
     const row2 = new ActionRowBuilder<ButtonBuilder>();
@@ -147,7 +151,7 @@ const drawTopicsCanvas = async (
             row.addComponents(
                 new ButtonBuilder()
                     .setCustomId(
-                        `${topicName}-${category}-${originalTopic}-topics`
+                        `${topicName}_${category}_${originalTopic}-topics`
                     )
                     .setEmoji(numbers[index])
                     .setStyle(2)
@@ -166,7 +170,7 @@ const drawTopicsCanvas = async (
             row2.addComponents(
                 new ButtonBuilder()
                     .setCustomId(
-                        `${topicName}-${category}-${originalTopic}-topics`
+                        `${topicName}_${category}_${originalTopic}-topics`
                     )
                     .setEmoji(numbers[index + 4])
                     .setStyle(2)
@@ -174,15 +178,12 @@ const drawTopicsCanvas = async (
         } catch (e) {}
     });
 
-    console.log(row);
-    console.log(row2);
-
     if (totalPages > 1) {
         if (currentPage > 0) {
             row.addComponents(
                 new ButtonBuilder()
                     .setCustomId(
-                        `${topicName}-${category}_topic-previous-${currentPage}`
+                        `${topicName}_${category}_topic-previous-${currentPage}`
                     )
                     .setLabel('👈')
                     .setStyle(2)
@@ -193,7 +194,7 @@ const drawTopicsCanvas = async (
             row2.addComponents(
                 new ButtonBuilder()
                     .setCustomId(
-                        `${topicName}-${category}_topic-next-${currentPage}`
+                        `${topicName}_${category}_topic-next-${currentPage}`
                     )
                     .setLabel('👉')
                     .setStyle(2)
