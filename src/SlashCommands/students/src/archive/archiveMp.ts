@@ -68,7 +68,6 @@ const drawMpCanvas = async (
         currentPage * 8,
         (currentPage + 1) * 8
     );
-    const canvas: Canvas = await drawArchiveCanvas('Les mps', translatedTopics);
 
     let currentTopicsRow1;
     let currentTopicsRow2;
@@ -80,6 +79,8 @@ const drawMpCanvas = async (
         currentTopicsRow1 = currentTopics;
         currentTopicsRow2 = [];
     }
+
+    const canvas: Canvas = await drawArchiveCanvas('Les mps', currentTopics);
 
     currentTopicsRow1.forEach((topic, index) => {
         if (topic == null) {

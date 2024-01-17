@@ -163,5 +163,14 @@
     },
     "euler": {
         "fr": "euler"
+    },
+    "vdw": {
+        "fr": "vdw"
+    },
+    "magnetic": {
+        "fr": "magnetique"
+    },
+    "flexion": {
+        "fr": "flexion"
     }
 }

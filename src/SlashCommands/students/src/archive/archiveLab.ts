@@ -78,7 +78,7 @@ const drawTpCanvas = async (
         currentTopicsRow2 = [];
     }
 
-    const canvas: Canvas = await drawArchiveCanvas('Les tps', translatedTopics);
+    const canvas: Canvas = await drawArchiveCanvas('Les tps', currentTopics);
     currentTopicsRow1.forEach((topic, index) => {
         if (topic == null) {
             return;
