@@ -57,7 +57,7 @@ const getFiles = async (interaction: ButtonInteraction, folder: string) => {
                     console.error(`Failed to upload file: ${result.reason}`);
                 }
             }
-            e;
+
             const rate = Math.floor(Math.random() * 4);
             if (rate === 2) {
                 // ask if the user is happy with the files with two buttons: 👍 or 👎
