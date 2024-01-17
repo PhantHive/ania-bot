@@ -92,9 +92,6 @@
     "differentials": {
         "fr": "diff"
     },
-    "Ma12": {
-        "fr": "Ma12"
-    },
     "electromag": {
         "fr": "electromag"
     },
@@ -141,12 +138,30 @@
         "fr": "mecaflu"
     },
     "wave": {
-        "fr": "phOnde"
+        "fr": "ondes"
     },
     "thermo": {
         "fr": "thermo"
     },
     "global": {
         "fr": "global"
+    },
+    "transistor": {
+        "fr": "transistor"
+    },
+    "booklet": {
+        "fr": "livret"
+    },
+    "quadratic": {
+        "fr": "quadratique"
+    },
+    "stress": {
+        "fr": "contrainte"
+    },
+    "endomorphism": {
+        "fr": "endomorphisme"
+    },
+    "euler": {
+        "fr": "euler"
     }
 }
