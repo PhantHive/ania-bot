@@ -90,7 +90,7 @@ const drawTpCanvas = async (
         try {
             row.addComponents(
                 new ButtonBuilder()
-                    .setCustomId(`${originalTopic}-lab`)
+                    .setCustomId(`${originalTopic}_lab`)
                     .setEmoji(numbers[index])
                     .setStyle(2)
             );
@@ -108,7 +108,7 @@ const drawTpCanvas = async (
         try {
             row2.addComponents(
                 new ButtonBuilder()
-                    .setCustomId(`${originalTopic}-lab`)
+                    .setCustomId(`${originalTopic}_lab`)
                     .setEmoji(numbers[index + 4])
                     .setStyle(2)
             );

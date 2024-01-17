@@ -93,7 +93,7 @@ const drawMpCanvas = async (
             try {
                 row.addComponents(
                     new ButtonBuilder()
-                        .setCustomId(`${originalTopic}-mp`)
+                        .setCustomId(`${originalTopic}_mp`)
                         .setEmoji(numbers[index])
                         .setStyle(2)
                 );
@@ -112,7 +112,7 @@ const drawMpCanvas = async (
             try {
                 row.addComponents(
                     new ButtonBuilder()
-                        .setCustomId(`${originalTopic}-mp`)
+                        .setCustomId(`${originalTopic}_mp`)
                         .setEmoji(numbers[index + 4])
                         .setStyle(2)
                 );
