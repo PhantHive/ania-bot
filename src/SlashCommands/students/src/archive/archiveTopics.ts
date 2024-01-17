@@ -125,8 +125,6 @@ const drawTopicsCanvas = async (
         (currentPage + 1) * 8
     );
 
-    console.log('tops: ', currentTopics);
-
     let currentTopicsRow1;
     let currentTopicsRow2;
 

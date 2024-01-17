@@ -14,7 +14,7 @@ const autoSizeAjust = async (ctx, size, text) => {
 
     do {
 
-        ctx.font = `bold ${fontSize -= 5}px Arial`;
+        ctx.font = `${fontSize -= 5}px Arial`;
 
     } while (ctx.measureText(text).width > 500);
 
@@ -59,7 +59,7 @@ const drawArchiveCanvas = async (
 
     // Title
     ctx.beginPath();
-    ctx.font = 'bold 55px Arial';
+    ctx.font = '55px Arial';
     ctx.fillStyle = colors['text'];
     ctx.shadowBlur = 5;
     ctx.shadowColor = colors['text'];
@@ -118,7 +118,7 @@ const drawArchiveCanvas = async (
 
     // choices
     ctx.beginPath();
-    ctx.font = 'bold 35px Arial';
+    ctx.font = '35px Arial';
     ctx.fillStyle = colors['text'];
 
     const availableSpace = canvas.width * 0.5;
