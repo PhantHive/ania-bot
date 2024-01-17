@@ -58,11 +58,6 @@ const drawFicheCanvas = async (
     // translate every topics
     const translatedTopics = topics.map((topic) => translator(topic, 'fr'));
 
-    const canvas: Canvas = await drawArchiveCanvas(
-        'Les fiches',
-        translatedTopics
-    );
-
     if (topics.length === 0) {
         return { buffer: null, row: null };
     }
@@ -84,6 +79,8 @@ const drawFicheCanvas = async (
         currentTopicsRow1 = currentTopics;
         currentTopicsRow2 = [];
     }
+
+    const canvas: Canvas = await drawArchiveCanvas('Les fiches', currentTopics);
 
     currentTopicsRow1.forEach((topic, index) => {
         if (topic == null) {
@@ -114,7 +111,7 @@ const drawFicheCanvas = async (
             row2.addComponents(
                 new ButtonBuilder()
                     .setCustomId(`${originalTopic}_sheet`)
-                    .setEmoji(numbers[index])
+                    .setEmoji(numbers[index + 4])
                     .setStyle(2)
             );
         } catch (e) {}
