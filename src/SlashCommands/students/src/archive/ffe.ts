@@ -57,9 +57,8 @@ const getFiles = async (interaction: ButtonInteraction, folder: string) => {
                     console.error(`Failed to upload file: ${result.reason}`);
                 }
             }
-
-            // one chance out of 10 to get  a rate message
-            const rate = Math.floor(Math.random() * 7);
+            e;
+            const rate = Math.floor(Math.random() * 4);
             if (rate === 2) {
                 // ask if the user is happy with the files with two buttons: 👍 or 👎
                 const row = new ActionRowBuilder<ButtonBuilder>();
