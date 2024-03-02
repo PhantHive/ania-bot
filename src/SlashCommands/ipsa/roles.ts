@@ -122,9 +122,48 @@ exports.default = new SlashCommand({
             menuAssoArt = await fetchInfos(assoArt, getAssoInfo);
             menuPromo = await fetchInfos(promos, getPromoInfo);
 
-            console.log(menuPromo);
-        } catch (error) {
-            console.log(error);
+            console.log(
+                `[${new Date().toISOString()}] User ${
+                    interaction.user.username
+                } (ID: ${
+                    interaction.user.id
+                }) chose the following tech roles: ${menuAssoTech
+                    .map((role) => role.label)
+                    .join(', ')}.`
+            );
+            console.log(
+                `[${new Date().toISOString()}] User ${
+                    interaction.user.username
+                } (ID: ${
+                    interaction.user.id
+                }) chose the following sport roles: ${menuAssoSport
+                    .map((role) => role.label)
+                    .join(', ')}.`
+            );
+            console.log(
+                `[${new Date().toISOString()}] User ${
+                    interaction.user.username
+                } (ID: ${
+                    interaction.user.id
+                }) chose the following art roles: ${menuAssoArt
+                    .map((role) => role.label)
+                    .join(', ')}.`
+            );
+            console.log(
+                `[${new Date().toISOString()}] User ${
+                    interaction.user.username
+                } (ID: ${
+                    interaction.user.id
+                }) chose the following promo roles: ${menuPromo
+                    .map((role) => role.label)
+                    .join(', ')}.`
+            );
+        } catch (e) {
+            console.log(
+                `[${new Date().toISOString()}] Error occurred: ${
+                    e.message
+                }\nStack trace: ${e.stack}`
+            );
         }
 
         // create discord embed builder
