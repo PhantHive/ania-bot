@@ -38,9 +38,9 @@ export default new Event('ready', async () => {
         console.log('-----------------------------------\n');
     }
 
-    client.user.setPresence({
+    client.user?.setPresence({
         activities: [
-            { name: '^_^ Click me!', type: ActivityType.Custom },
+            { name: '^_^ Click me!' },
             { name: 'PHEARION NETWORK', type: ActivityType.Competing },
         ],
         status: 'dnd',
