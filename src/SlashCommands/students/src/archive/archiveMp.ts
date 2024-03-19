@@ -39,7 +39,11 @@ const getMps = async (ressource: string): Promise<string[]> => {
             });
         });
     } catch (e) {
-        console.log(e);
+        console.log(
+            `[${new Date().toISOString()}] Error occurred: ${
+                e.message
+            }\nStack trace: ${e.stack}`
+        );
         return [];
     }
     return fields;

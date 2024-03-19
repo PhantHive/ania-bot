@@ -18,8 +18,6 @@ const autoSizeAjust = async (ctx, size, text) => {
 
     } while (ctx.measureText(text).width > 500);
 
-    console.log(fontSize);
-
     return ctx.font;
 
 }

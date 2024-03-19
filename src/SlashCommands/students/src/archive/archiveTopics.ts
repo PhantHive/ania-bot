@@ -103,8 +103,16 @@ const drawTopicsCanvas = async (
     const category = String.prototype.slice.call(field, lastDash + 1);
     const topicName = String.prototype.slice.call(field, 0, lastDash);
 
-    console.log('category: ', category);
-    console.log('topicName: ', topicName);
+    console.log(
+        `[${new Date().toISOString()}] User ${interaction.user.username} (ID: ${
+            interaction.user.id
+        }) accessed the category: ${category}.`
+    );
+    console.log(
+        `[${new Date().toISOString()}] User ${interaction.user.username} (ID: ${
+            interaction.user.id
+        }) accessed the topic: ${topicName}.`
+    );
 
     const row = new ActionRowBuilder<ButtonBuilder>();
     const row2 = new ActionRowBuilder<ButtonBuilder>();
