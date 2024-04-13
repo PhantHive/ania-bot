@@ -172,5 +172,11 @@
     },
     "flexion": {
         "fr": "flexion"
+    },
+    "adiabatic": {
+        "fr": "adiabatique"
+    },
+    "pump": {
+        "fr": "pompe"
     }
 }
