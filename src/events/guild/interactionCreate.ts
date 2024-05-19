@@ -217,10 +217,6 @@ export default new Event('interactionCreate', async (interaction) => {
             // use regex to get the subject name before the last "_" and after the last "-"
             const subject = button.customId.slice(lastUnderscore + 1, lastDash);
 
-            console.log('topic: ' + topic);
-            console.log('category: ' + category);
-            console.log('subject: ' + subject);
-
             // 'fr' should be changed in the future!! to be adapted to server automatically.
             const folder = join(
                 __dirname,
