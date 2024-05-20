@@ -1,5 +1,7 @@
 import { ButtonInteraction, GuildMember, Role } from 'discord.js';
-import MV from '../../../typings/MongoTypes';
+import StudentModel from '../../../assets/utils/models/MailSystem';
+
+const MV = StudentModel;
 import { Mutex } from 'async-mutex';
 const writeMutex = new Mutex();
 import { debounce } from 'lodash';

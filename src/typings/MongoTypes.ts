@@ -1,7 +1,6 @@
-import MV from '../assets/utils/models/MailSystem';
-import { Document, FilterQuery, Model } from 'mongoose';
+import { Document } from 'mongoose';
 
-interface StudentDocument extends Document {
+export interface IStudentDocument extends Document {
     discordId: string;
     discordTag: string;
     firstName: string;
@@ -15,12 +14,7 @@ interface StudentDocument extends Document {
     email: string;
 }
 
-interface MailModel extends Model<StudentDocument> {
-    findOneOrCreate: (
-        this: Model<StudentDocument>,
-        filter: FilterQuery<StudentDocument>,
-        doc: StudentDocument
-    ) => Promise<StudentDocument>;
+export interface INewsDocument extends Document {
+    serverId: string;
+    latestArticle: string;
 }
-
-export default MV as MailModel;

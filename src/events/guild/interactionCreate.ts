@@ -23,7 +23,9 @@ import { addRole, writeRole, removeRoles } from './ipsaRoles/addRoles';
 import { showModal } from './emailCheck/showModal';
 import { verification } from './emailCheck/checkMail';
 import { RunOptions } from '../../typings/SlashCommand';
-import MV from '../../typings/MongoTypes';
+import StudentModel from '../../assets/utils/models/MailSystem';
+
+const MV = StudentModel;
 import {
     ButtonInteraction,
     CommandInteraction,

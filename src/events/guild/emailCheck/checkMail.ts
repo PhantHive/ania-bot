@@ -3,7 +3,9 @@ import promoRef from '../../../assets/json/promos.json';
 import mailVerif from '../../../assets/admin/mailsVerif.json';
 import { ExtendedClient } from '../../../structures/Client';
 import { ModalSubmitInteraction, Role } from 'discord.js';
-import MV from '../../../typings/MongoTypes';
+import StudentModel from '../../../assets/utils/models/MailSystem';
+
+const MV = StudentModel;
 
 const verification = class Verif {
     mail: string;
