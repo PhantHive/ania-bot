@@ -235,6 +235,7 @@ export default new Event('interactionCreate', async (interaction) => {
                 embeds: [embed],
                 components: [row],
                 files: [attachment],
+                ephemeral: true,
             });
         }
 
