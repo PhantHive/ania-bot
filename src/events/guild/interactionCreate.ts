@@ -23,7 +23,9 @@ import { addRole, writeRole, removeRoles } from './ipsaRoles/addRoles';
 import { showModal } from './emailCheck/showModal';
 import { verification } from './emailCheck/checkMail';
 import { RunOptions } from '../../typings/SlashCommand';
-import MV from '../../typings/MongoTypes';
+import StudentModel from '../../assets/utils/models/MailSystem';
+
+const MV = StudentModel;
 import {
     ButtonInteraction,
     CommandInteraction,
@@ -216,10 +218,6 @@ export default new Event('interactionCreate', async (interaction) => {
             const category = button.customId.split('_')[1].split('-')[0];
             // use regex to get the subject name before the last "_" and after the last "-"
             const subject = button.customId.slice(lastUnderscore + 1, lastDash);
-
-            console.log('topic: ' + topic);
-            console.log('category: ' + category);
-            console.log('subject: ' + subject);
 
             // 'fr' should be changed in the future!! to be adapted to server automatically.
             const folder = join(

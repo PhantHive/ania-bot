@@ -1,6 +1,8 @@
 // const request = require("request-promise");
 import { SlashCommand } from '../../structures/SlashCommand';
-import MV from '../../typings/MongoTypes';
+import StudentModel from '../../assets/utils/models/MailSystem';
+
+const MV = StudentModel;
 
 exports.default = new SlashCommand({
     name: 'change-db-field',

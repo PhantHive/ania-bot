@@ -1,4 +1,6 @@
-import MV from '../../../typings/MongoTypes';
+import StudentModel from '../../../assets/utils/models/MailSystem';
+
+const MV = StudentModel;
 import { Message } from 'discord.js';
 import PROMOS from '../../../assets/json/promos.json';
 

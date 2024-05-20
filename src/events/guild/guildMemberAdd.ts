@@ -1,5 +1,7 @@
 import { Event } from '../../structures/Event';
-import MV from '../../typings/MongoTypes';
+import StudentModel from '../../assets/utils/models/MailSystem';
+
+const MV = StudentModel;
 
 const promoToRole = {
     2028: 'aero1',
