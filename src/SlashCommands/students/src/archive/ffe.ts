@@ -58,7 +58,7 @@ const getFiles = async (interaction: ButtonInteraction, folder: string) => {
                 }
             }
 
-            const rate = Math.floor(Math.random() * 4);
+            const rate = Math.floor(Math.random() * 10);
             if (rate === 2) {
                 // ask if the user is happy with the files with two buttons: 👍 or 👎
                 const row = new ActionRowBuilder<ButtonBuilder>();

@@ -24,7 +24,7 @@ exports.default = new SlashCommand({
 
         await interaction.deferReply({ ephemeral: true });
 
-        const topics = ['MP', 'TP', 'FICHES', 'BIG BRAIN'];
+        const topics = ['MP', 'TP', 'FICHES', 'DONATION'];
         const canvas: Canvas = await drawArchiveCanvas('The Archive', topics);
 
         // Button builders
@@ -44,8 +44,8 @@ exports.default = new SlashCommand({
             .setStyle(2);
 
         const sendFilesButton = new ButtonBuilder()
-            .setCustomId('bigbrain')
-            .setEmoji(numbers[3])
+            .setCustomId('donation')
+            .setEmoji(numbers[8])
             .setStyle(2);
 
         // Action row builder

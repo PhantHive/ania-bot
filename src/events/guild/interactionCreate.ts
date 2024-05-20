@@ -27,8 +27,13 @@ import StudentModel from '../../assets/utils/models/MailSystem';
 
 const MV = StudentModel;
 import {
+    ActionRowBuilder,
+    AttachmentBuilder,
+    ButtonBuilder,
     ButtonInteraction,
+    ButtonStyle,
     CommandInteraction,
+    EmbedBuilder,
     ModalSubmitInteraction,
     StringSelectMenuInteraction,
     TextChannel,
@@ -195,10 +200,41 @@ export default new Event('interactionCreate', async (interaction) => {
             await showTopics(button, button.customId);
         }
 
-        if (button.customId === 'bigbrain') {
+        if (button.customId === 'donation') {
+            const attachment = new AttachmentBuilder(
+                './src/assets/image/donation/donate-button.webp',
+                { name: 'donate-button.webp' }
+            );
+
+            const embed = new EmbedBuilder()
+                .setTitle('🌟 Donations 🌟')
+                .setImage('attachment://donate-button.webp')
+                .setDescription(
+                    "✨ Si tu souhaites maintenir en vie l'archive, tu peux avec un don. Chaque geste compte ! ✨"
+                )
+                .setColor('#FFD700')
+                .setFooter({
+                    text: 'Merci pour ton soutien !',
+                    iconURL: client.user.displayAvatarURL(),
+                });
+
+            // Create a button
+            const donateButton = new ButtonBuilder()
+                .setStyle(ButtonStyle.Link)
+                .setLabel('Faire une donation!')
+                .setURL(
+                    'https://paypal.me/phearion?country.x=FR&locale.x=fr_FR'
+                );
+
+            // Create an action row
+            const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+                donateButton
+            );
+
             await button.reply({
-                content: 'A venir.',
-                ephemeral: true,
+                embeds: [embed],
+                components: [row],
+                files: [attachment],
             });
         }
 
