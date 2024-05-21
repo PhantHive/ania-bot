@@ -9,6 +9,7 @@ import {
     StringSelectMenuBuilder,
     AttachmentBuilder,
 } from 'discord.js';
+import path from 'path';
 
 interface AssoInfo {
     label: string;
@@ -167,10 +168,20 @@ exports.default = new SlashCommand({
         }
 
         // create discord embed builder
-        const attachment = new AttachmentBuilder(
-            'src/assets/image/logo/ipsa_logo.png',
-            { name: 'ipsa.png' }
+        const imagePath = path.join(
+            __dirname,
+            '..',
+            '..',
+            'assets',
+            'image',
+            'logo',
+            'ipsa_logo.png'
         );
+
+        const attachment = new AttachmentBuilder(imagePath, {
+            name: 'ipsa.png',
+        });
+
         const embed = new EmbedBuilder()
             .setTitle('Choisis tes rôles')
             .setDescription('Choose your roles')
