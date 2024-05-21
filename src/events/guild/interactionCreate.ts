@@ -13,7 +13,7 @@ import {
     showTopics,
 } from '../../SlashCommands/students/src/archive/archiveTopics';
 import { getFiles } from '../../SlashCommands/students/src/archive/ffe';
-import { join } from 'path';
+import path, { join } from 'path';
 import {
     drawFicheCanvas,
     showFiches,
@@ -201,10 +201,18 @@ export default new Event('interactionCreate', async (interaction) => {
         }
 
         if (button.customId === 'donation') {
-            const attachment = new AttachmentBuilder(
-                'src/assets/image/donation/donate-button.webp',
-                { name: 'donate-button.webp' }
+            const imagePath = path.join(
+                __dirname,
+                '..',
+                '..',
+                'assets',
+                'image',
+                'donation',
+                'donate-button.webp'
             );
+            const attachment = new AttachmentBuilder(imagePath, {
+                name: 'donate-button.webp',
+            });
 
             const embed = new EmbedBuilder()
                 .setTitle('🌟 Donations 🌟')
