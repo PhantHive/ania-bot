@@ -202,7 +202,7 @@ export default new Event('interactionCreate', async (interaction) => {
 
         if (button.customId === 'donation') {
             const attachment = new AttachmentBuilder(
-                './src/assets/image/donation/donate-button.webp',
+                'src/assets/image/donation/donate-button.webp',
                 { name: 'donate-button.webp' }
             );
 

@@ -168,7 +168,7 @@ exports.default = new SlashCommand({
 
         // create discord embed builder
         const attachment = new AttachmentBuilder(
-            './src/assets/image/logo/ipsa_logo.png',
+            'src/assets/image/logo/ipsa_logo.png',
             { name: 'ipsa.png' }
         );
         const embed = new EmbedBuilder()
