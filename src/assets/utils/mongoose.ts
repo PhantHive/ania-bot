@@ -2,7 +2,6 @@ import mongoose, { ConnectOptions } from 'mongoose';
 
 // Create interface for connections options
 interface DbConnectOptions extends ConnectOptions {
-    useNewUrlParser: boolean;
     autoIndex: boolean;
     connectTimeoutMS: number;
     maxPoolSize: number;
@@ -12,7 +11,6 @@ interface DbConnectOptions extends ConnectOptions {
 const dbConnect = {
     init: async () => {
         const options: DbConnectOptions = {
-            useNewUrlParser: true,
             autoIndex: false,
             connectTimeoutMS: 70000,
             maxPoolSize: 100,
