@@ -13,7 +13,15 @@ exports.default = new SlashCommand({
     name: 'archive',
     description: 'Simply, the archive.',
     run: async ({ interaction }) => {
-        await interaction.deferReply({ ephemeral: true });
+        console.log(`Received interaction: ${interaction.id}`);
+
+        await interaction.deferReply({ ephemeral: true }).catch((error) => {
+            console.error(
+                `Failed to defer reply for interaction ${interaction.id}: ${error}`
+            );
+        });
+
+        console.log(`Deferred reply for interaction: ${interaction.id}`);
 
         const timestamp = new Date().toISOString();
         const userId = interaction.user.id;
@@ -63,6 +71,7 @@ exports.default = new SlashCommand({
         });
 
         await interaction.editReply({
+            content: '',
             files: [attachment],
             components: [row],
         });
