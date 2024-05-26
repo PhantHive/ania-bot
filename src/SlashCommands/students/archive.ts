@@ -13,68 +13,74 @@ exports.default = new SlashCommand({
     name: 'archive',
     description: 'Simply, the archive.',
     run: async ({ interaction }) => {
-      
         console.log(`Received interaction: ${interaction.id}`);
 
-        await interaction.deferReply({ ephemeral: true }).catch((error) => {
+        try {
+            await interaction.deferReply({ ephemeral: true });
+            console.log(`Deferred reply for interaction: ${interaction.id}`);
+        } catch (error) {
             console.error(
                 `Failed to defer reply for interaction ${interaction.id}: ${error}`
             );
-        });
+            return;
+        }
 
-        console.log(`Deferred reply for interaction: ${interaction.id}`);
+        try {
+            const timestamp = new Date().toISOString();
+            const userId = interaction.user.id;
+            const username = interaction.user.username;
+            const command = 'archive';
 
-        const timestamp = new Date().toISOString();
-        const userId = interaction.user.id;
-        const username = interaction.user.username;
-        const command = 'archive';
+            console.log(
+                `[${timestamp}] User ${username} (ID: ${userId}) summoned the ${command} command.`
+            );
 
-        console.log(
-            `[${timestamp}] User ${username} (ID: ${userId}) summoned the ${command} command.`
-        );
+            const topics = ['MP', 'TP', 'FICHES', 'DONATION'];
+            const canvas: Canvas = await drawArchiveCanvas(
+                'The Archive',
+                topics
+            );
 
-        const topics = ['MP', 'TP', 'FICHES', 'DONATION'];
-        const canvas: Canvas = await drawArchiveCanvas('The Archive', topics);
+            const mpButton = new ButtonBuilder()
+                .setCustomId('mp')
+                .setEmoji(numbers[0])
+                .setStyle(ButtonStyle.Secondary);
+            const tpButton = new ButtonBuilder()
+                .setCustomId('lab')
+                .setEmoji(numbers[1])
+                .setStyle(2);
+            const sheetsButton = new ButtonBuilder()
+                .setCustomId('sheet')
+                .setEmoji(numbers[2])
+                .setStyle(2);
+            const sendFilesButton = new ButtonBuilder()
+                .setCustomId('donation')
+                .setEmoji(numbers[3])
+                .setStyle(2);
 
-        // Button builders
-        const mpButton = new ButtonBuilder()
-            .setCustomId('mp')
-            .setEmoji(numbers[0])
-            .setStyle(ButtonStyle.Secondary);
+            const actionRow =
+                new ActionRowBuilder<ButtonBuilder>().addComponents(
+                    mpButton,
+                    tpButton,
+                    sheetsButton,
+                    sendFilesButton
+                );
 
-        const tpButton = new ButtonBuilder()
-            .setCustomId('lab')
-            .setEmoji(numbers[1])
-            .setStyle(2);
+            const attachment = new AttachmentBuilder(canvas.toBuffer(), {
+                name: 'archive.png',
+            });
 
-        const sheetsButton = new ButtonBuilder()
-            .setCustomId('sheet')
-            .setEmoji(numbers[2])
-            .setStyle(2);
-
-        const sendFilesButton = new ButtonBuilder()
-            .setCustomId('donation')
-            .setEmoji(numbers[8])
-            .setStyle(2);
-
-        // Action row builder
-        const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-            mpButton,
-            tpButton,
-            sheetsButton,
-            sendFilesButton
-        );
-
-        // canvas to gif as a message attachment for discord
-        const buffer = canvas.toBuffer('image/png');
-        const attachment = new AttachmentBuilder(buffer, {
-            name: 'archive.png',
-        });
-
-        await interaction.editReply({
-            content: '',
-            files: [attachment],
-            components: [row],
-        });
+            await interaction.editReply({
+                files: [attachment],
+                components: [actionRow],
+            });
+            console.log(
+                `Replied with archive canvas for interaction: ${interaction.id}`
+            );
+        } catch (error) {
+            console.error(
+                `Failed to reply with archive canvas for interaction ${interaction.id}: ${error}`
+            );
+        }
     },
 });
