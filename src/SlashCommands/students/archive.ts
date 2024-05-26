@@ -13,6 +13,7 @@ const logTime = (message: string) => {
     console.log(`${new Date().toISOString()} - ${message}`);
 };
 
+
 const deferReplySafely = async (interaction) => {
     try {
         logTime(`Attempting to defer reply for interaction ${interaction.id}`);
@@ -37,6 +38,7 @@ const deferReplySafely = async (interaction) => {
         }
         return false;
     }
+
 };
 
 exports.default = new SlashCommand({
