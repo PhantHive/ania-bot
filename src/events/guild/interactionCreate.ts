@@ -39,6 +39,7 @@ import {
     TextChannel,
 } from 'discord.js';
 import { sendNewPage } from '../../SlashCommands/students/src/archive/userPages';
+import { incrementCategoryCounter } from '../../metrics';
 
 export default new Event('interactionCreate', async (interaction) => {
     if (!interaction.inGuild()) {
@@ -173,18 +174,21 @@ export default new Event('interactionCreate', async (interaction) => {
         // ===============
 
         if (button.customId === 'mp') {
+            incrementCategoryCounter('mp');
             await showMps(button)
                 .then()
                 .catch((err) => console.error(err));
         }
 
         if (button.customId === 'lab') {
+            incrementCategoryCounter('lab');
             await showTps(button)
                 .then()
                 .catch((err) => console.error(err));
         }
 
         if (button.customId === 'sheet') {
+            incrementCategoryCounter('sheet');
             try {
                 await showFiches(button);
             } catch (err) {
@@ -201,6 +205,7 @@ export default new Event('interactionCreate', async (interaction) => {
         }
 
         if (button.customId === 'donation') {
+            incrementCategoryCounter('donation');
             const imagePath = path.join(
                 __dirname,
                 '..',
