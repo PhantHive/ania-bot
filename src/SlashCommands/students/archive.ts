@@ -13,6 +13,7 @@ exports.default = new SlashCommand({
     name: 'archive',
     description: 'Simply, the archive.',
     run: async ({ interaction }) => {
+      
         console.log(`Received interaction: ${interaction.id}`);
 
         await interaction.deferReply({ ephemeral: true }).catch((error) => {
