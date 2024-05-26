@@ -245,7 +245,7 @@ const showTopics = async (interaction: ButtonInteraction, field: string) => {
     }
 
     try {
-        await interaction.update({
+        return interaction.update({
             content: '',
             files: [buffer],
             components: components,

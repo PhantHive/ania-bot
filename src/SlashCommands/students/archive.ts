@@ -10,9 +10,8 @@ import { Canvas } from 'canvas';
 import { numbers } from './src/archive/userPages';
 
 const logTime = (message: string) => {
-    console.log(`${new Date().toISOString()} - ${message}`);
+    console.log(`[${new Date().toISOString()}] - ${message}`);
 };
-
 
 const deferReplySafely = async (interaction) => {
     try {
@@ -38,7 +37,6 @@ const deferReplySafely = async (interaction) => {
         }
         return false;
     }
-
 };
 
 exports.default = new SlashCommand({

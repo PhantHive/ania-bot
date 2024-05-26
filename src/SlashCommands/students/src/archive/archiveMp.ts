@@ -177,7 +177,7 @@ const showMps = async (interaction: ButtonInteraction) => {
     }
 
     try {
-        await interaction.update({
+        return interaction.update({
             content: '',
             files: [buffer],
             components: components,
