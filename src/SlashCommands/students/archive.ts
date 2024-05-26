@@ -13,6 +13,8 @@ exports.default = new SlashCommand({
     name: 'archive',
     description: 'Simply, the archive.',
     run: async ({ interaction }) => {
+        await interaction.deferReply({ ephemeral: true });
+
         const timestamp = new Date().toISOString();
         const userId = interaction.user.id;
         const username = interaction.user.username;
@@ -21,8 +23,6 @@ exports.default = new SlashCommand({
         console.log(
             `[${timestamp}] User ${username} (ID: ${userId}) summoned the ${command} command.`
         );
-
-        await interaction.deferReply({ ephemeral: true });
 
         const topics = ['MP', 'TP', 'FICHES', 'DONATION'];
         const canvas: Canvas = await drawArchiveCanvas('The Archive', topics);
