@@ -8,11 +8,13 @@ import drawArchiveCanvas from './src/canvas/drawingCanvas';
 import { SlashCommand } from '../../structures/SlashCommand';
 import { Canvas } from 'canvas';
 import { numbers } from './src/archive/userPages';
+import { incrementArchiveCommandCounter } from '../../metrics';
 
 exports.default = new SlashCommand({
     name: 'archive',
     description: 'Simply, the archive.',
     run: async ({ interaction }) => {
+        incrementArchiveCommandCounter();
         const timestamp = new Date().toISOString();
         const userId = interaction.user.id;
         const username = interaction.user.username;
