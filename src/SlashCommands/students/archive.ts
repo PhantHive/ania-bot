@@ -13,27 +13,30 @@ const logTime = (message: string) => {
     console.log(`${new Date().toISOString()} - ${message}`);
 };
 
-const deferReplyWithRetry = async (interaction, retries = 3, delay = 1000) => {
-    for (let attempt = 1; attempt <= retries; attempt++) {
-        try {
-            logTime(
-                `Attempting to defer reply for interaction ${interaction.id}, attempt ${attempt}`
-            );
-            await interaction.deferReply({ ephemeral: true });
-            logTime(
-                `Successfully deferred reply for interaction ${interaction.id} on attempt ${attempt}`
-            );
-            return true;
-        } catch (error) {
+const deferReplySafely = async (interaction) => {
+    try {
+        logTime(`Attempting to defer reply for interaction ${interaction.id}`);
+        await interaction.deferReply({ ephemeral: true });
+        logTime(
+            `Successfully deferred reply for interaction ${interaction.id}`
+        );
+        return true;
+    } catch (error) {
+        if (error.code === 10062) {
             console.error(
-                `Attempt ${attempt} to defer reply for interaction ${interaction.id} failed: ${error}`
+                `Failed to defer reply for interaction ${interaction.id}: Unknown interaction`
             );
-            if (attempt < retries) {
-                await new Promise((resolve) => setTimeout(resolve, delay));
-            }
+        } else if (error.code === 40060) {
+            console.error(
+                `Failed to defer reply for interaction ${interaction.id}: Interaction has already been acknowledged`
+            );
+        } else {
+            console.error(
+                `Failed to defer reply for interaction ${interaction.id}: ${error}`
+            );
         }
+        return false;
     }
-    return false;
 };
 
 exports.default = new SlashCommand({
@@ -42,10 +45,10 @@ exports.default = new SlashCommand({
     run: async ({ interaction }) => {
         logTime(`Received interaction: ${interaction.id}`);
 
-        const deferred = await deferReplyWithRetry(interaction);
+        const deferred = await deferReplySafely(interaction);
         if (!deferred) {
             console.error(
-                `Failed to defer reply for interaction ${interaction.id} after multiple attempts.`
+                `Failed to defer reply for interaction ${interaction.id}.`
             );
             return;
         }
