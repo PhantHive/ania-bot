@@ -178,5 +178,8 @@
     },
     "pump": {
         "fr": "pompe"
+    },
+    "integral": {
+        "fr": "integrale"
     }
 }
