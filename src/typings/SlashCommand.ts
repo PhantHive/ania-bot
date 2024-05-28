@@ -11,6 +11,7 @@ import {
     AttachmentBuilder,
     ButtonInteraction,
     ModalSubmitInteraction,
+    ContextMenuCommandInteraction,
 } from 'discord.js';
 
 interface CustomOptions {
@@ -43,7 +44,8 @@ export interface RunOptions {
         | ExtendedSelectMenuInteraction
         | CommandInteraction
         | ButtonInteraction
-        | ModalSubmitInteraction;
+        | ModalSubmitInteraction
+        | ContextMenuCommandInteraction;
     args: CommandInteractionOptionResolver;
 }
 

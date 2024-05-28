@@ -1,7 +1,13 @@
 import pLimit from 'p-limit';
 import fs from 'fs';
 import { join } from 'path';
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction } from 'discord.js';
+import {
+    ActionRowBuilder,
+    AttachmentBuilder,
+    ButtonBuilder,
+    ButtonInteraction,
+    EmbedBuilder,
+} from 'discord.js';
 
 const limit = pLimit(2);
 
@@ -64,17 +70,51 @@ const getFiles = async (interaction: ButtonInteraction, folder: string) => {
                 const row = new ActionRowBuilder<ButtonBuilder>();
                 row.addComponents(
                     new ButtonBuilder()
-                        .setCustomId(`ffe-rate-happy`)
-                        .setLabel('👍')
+                        .setCustomId(`ffe-rate-feedback`)
+                        .setLabel('Oui! 😄')
                         .setStyle(3),
+
                     new ButtonBuilder()
-                        .setCustomId(`ffe-rate-unhappy`)
-                        .setLabel('👎')
+                        .setCustomId(`ffe-rate-feedback-no`)
+                        .setLabel('Non! 😞')
                         .setStyle(4)
                 );
+
+                // create a futuristic embed with the image in assets/image/feedback/feedback-lucky.png
+                const attachment = new AttachmentBuilder(
+                    join(
+                        __dirname,
+                        '..',
+                        '..',
+                        '..',
+                        '..',
+                        'assets',
+                        'image',
+                        'feedback',
+                        'feedback-lucky.png'
+                    ),
+                    {
+                        name: 'feedback-lucky.png',
+                    }
+                );
+
+                const embed = new EmbedBuilder()
+                    .setTitle('Salut! 👋')
+                    .setDescription(
+                        'Souhaitez-vous donner un retour sur le système Archive ?'
+                    )
+                    .setColor('Green')
+                    .setImage('attachment://feedback-lucky.png')
+                    .setTimestamp()
+                    .setFooter({
+                        text: 'Lucky - Archive Feedback',
+                        iconURL: interaction.user.displayAvatarURL(),
+                    });
+
                 await interaction.followUp({
-                    content: `Rate your experience with the FFE System:`,
+                    embeds: [embed],
                     components: [row],
+                    files: [attachment],
                     ephemeral: true,
                 });
             }
