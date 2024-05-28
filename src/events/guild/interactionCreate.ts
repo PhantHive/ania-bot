@@ -36,10 +36,10 @@ import {
     EmbedBuilder,
     ModalSubmitInteraction,
     StringSelectMenuInteraction,
-    TextChannel,
 } from 'discord.js';
 import { sendNewPage } from '../../SlashCommands/students/src/archive/userPages';
 import { incrementCategoryCounter } from '../../metrics';
+import { feedbackTutorial, handleFeedback } from './feedback/ffeFeedback';
 
 export default new Event('interactionCreate', async (interaction) => {
     if (!interaction.inGuild()) {
@@ -349,33 +349,21 @@ export default new Event('interactionCreate', async (interaction) => {
             }
         }
 
-        if (button.customId === 'ffe-rate-happy') {
-            await button.deferUpdate();
-            // send to the channel 1189276341011501197 of the guild 502931781012684818 "+1"
-            try {
-                const guild = client.guilds.cache.get('502931781012684818');
-                const channel = guild.channels.cache.get('1189276341011501197');
-                await (channel as TextChannel).send('+1');
-            } catch {}
-
-            try {
-                await button.deleteReply();
-            } catch {}
+        if (button.customId === 'ffe-rate-feedback') {
+            await feedbackTutorial(button);
         }
 
-        if (button.customId === 'ffe-rate-unhappy') {
-            await button.deferUpdate();
-            try {
-                const guild = client.guilds.cache.get('502931781012684818');
-                const channel = guild.channels.cache.get('1189276381297786920');
-                await (channel as TextChannel).send('-1');
-            } catch {}
+        if (button.customId === 'ffe-rate-feedback-no') {
+            await button.update({
+                content: 'A bientôt !',
+                embeds: [],
+                components: [],
+            });
 
-            try {
-                await button.deleteReply();
-            } catch {}
+            setTimeout(() => {
+                button.deleteReply();
+            }, 5000);
         }
-        // ===============
     }
 
     if (interaction.isModalSubmit()) {
@@ -393,6 +381,10 @@ export default new Event('interactionCreate', async (interaction) => {
             await modal.editReply({
                 content: isVerified,
             });
+        }
+
+        if (modal.customId === 'feedback') {
+            await handleFeedback(modal);
         }
     }
 
