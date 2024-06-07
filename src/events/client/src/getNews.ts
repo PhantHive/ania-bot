@@ -7,6 +7,8 @@ import {
     ActionRowBuilder,
     Guild,
     GuildTextBasedChannel,
+    ComponentType,
+    ButtonComponent,
 } from 'discord.js';
 import { client } from '../../../index';
 
@@ -59,6 +61,37 @@ const getNews = async (data, guild, channelId) => {
             const desc = $('.article_excerpt')
                 .text()
                 .match(/[^\r\n]+/g)[0];
+
+            const channel = guild.channels.cache.find(
+                (ch) => ch.id === channelId
+            ) as GuildTextBasedChannel;
+
+            // Fetch the last message sent by the bot in the channel
+            const messages = await channel.messages.fetch({
+                limit: 1,
+                user: client.user.id,
+            });
+            const lastMessage = messages.first();
+
+            // Check if the last message contains a button with a link
+            if (lastMessage && lastMessage.components.length > 0) {
+                const actionRow = lastMessage.components.find(
+                    (component) => component.type === ComponentType.ActionRow
+                );
+                if (actionRow) {
+                    const lastButton = actionRow.components.find(
+                        (component) => component.type === ComponentType.Button
+                    ) as ButtonComponent;
+                    const lastButtonLink = lastButton?.url;
+
+                    // If the link in the last button matches the new article link, update the database and do not send the news again
+                    if (lastButtonLink === articleLink) {
+                        data.latestArticle = articleLink;
+                        await data.save();
+                        return;
+                    }
+                }
+            }
 
             if (!data) {
                 sendNews(title, image, desc, articleLink, guild, channelId);
