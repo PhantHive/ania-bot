@@ -69,9 +69,11 @@ const getNews = async (data, guild, channelId) => {
             // Fetch the last message sent by the bot in the channel
             const messages = await channel.messages.fetch({
                 limit: 1,
-                user: client.user.id,
             });
-            const lastMessage = messages.first();
+
+            const lastMessage = messages.find(
+                (msg) => msg.author.id === client.user.id
+            );
 
             // Check if the last message contains a button with a link
             if (lastMessage && lastMessage.components.length > 0) {
