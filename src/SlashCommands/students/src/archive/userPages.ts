@@ -1,5 +1,10 @@
 // userPages.ts
-import { ButtonInteraction, ActionRowBuilder, ButtonBuilder } from 'discord.js';
+import {
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonInteraction,
+    ButtonStyle,
+} from 'discord.js';
 
 const numbers = [
     '1189297626529660968',
@@ -21,6 +26,17 @@ const sendNewPage = async (
 ): Promise<void> => {
     // Now, send or update the interaction and filter any empty rows
     const components = [row, row2].filter((r) => r.components.length > 0);
+    const menuRow = new ActionRowBuilder<ButtonBuilder>();
+    menuRow.addComponents(
+        new ButtonBuilder()
+            .setCustomId('archive-home')
+            .setLabel('Menu')
+            .setEmoji('🏠')
+            .setStyle(ButtonStyle.Primary)
+    );
+
+    components.push(menuRow);
+
     try {
         await interaction.update({ content: '', files: [buffer], components });
     } catch (error) {

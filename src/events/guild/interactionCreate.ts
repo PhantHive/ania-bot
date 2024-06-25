@@ -40,6 +40,7 @@ import {
 import { sendNewPage } from '../../SlashCommands/students/src/archive/userPages';
 import { incrementCategoryCounter } from '../../metrics';
 import { feedbackTutorial, handleFeedback } from './feedback/ffeFeedback';
+import { archiveMenu } from '../../SlashCommands/students/archive';
 
 export default new Event('interactionCreate', async (interaction) => {
     if (!interaction.inGuild()) {
@@ -363,6 +364,14 @@ export default new Event('interactionCreate', async (interaction) => {
             setTimeout(() => {
                 button.deleteReply();
             }, 5000);
+        }
+
+        if (button.customId === 'archive-home') {
+            try {
+                await archiveMenu(button);
+            } catch (err) {
+                console.error(err);
+            }
         }
     }
 
