@@ -12,6 +12,7 @@ import { ButtonInteraction } from 'discord.js';
 import data from '../../../../assets/json/promos.json';
 import { translator } from './translator';
 import { numbers } from './userPages';
+import { menuRow } from './homeButton';
 
 const getMps = async (ressource: string): Promise<string[]> => {
     const fields = [];
@@ -175,6 +176,8 @@ const showMps = async (interaction: ButtonInteraction) => {
     if (row2.components.length > 0) {
         components.push(row2);
     }
+
+    components.push(menuRow);
 
     try {
         await interaction.update({

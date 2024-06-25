@@ -12,6 +12,7 @@ import { ButtonInteraction } from 'discord.js';
 import data from '../../../../assets/json/promos.json';
 import { translator } from './translator';
 import { numbers } from './userPages';
+import { menuRow } from './homeButton';
 
 const getTopics = async (
     category: string,
@@ -243,6 +244,9 @@ const showTopics = async (interaction: ButtonInteraction, field: string) => {
     if (row2.components.length > 0) {
         components.push(row2);
     }
+
+    // home button
+    components.push(menuRow);
 
     try {
         await interaction.update({
