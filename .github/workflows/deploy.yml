@@ -1,61 +1,61 @@
 name: Discord Ania Bot Deploy
 
 on:
-  push:
-    tags:
-      - 'v*' # Trigger the workflow on tags starting with 'v'
+    push:
+        tags:
+            - 'v*' # Trigger the workflow on tags starting with 'v'
 jobs:
-  deploy:
-    runs-on: self-hosted
+    deploy:
+        runs-on: self-hosted
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 21.1.0
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 21.1.0
 
-      - name: Install dependencies
-        run: npm install
+            - name: Install dependencies
+              run: npm install
 
-      - name: Execute deploy script
-        run: sh deployPrivateFiles.sh
+            - name: Execute deploy script
+              run: sh deployPrivateFiles.sh
 
-      - name: Copy assets
-        run: npm run copy:assets
+            - name: Copy assets
+              run: npm run copy:assets
 
-      - name: Build
-        run: npm run build
+            - name: Build
+              run: npm run build
 
-      - name: Package only the dist folder
-        uses: actions/upload-artifact@v2
-        with:
-          name: dist
-          path: dist
+            - name: Package only the dist folder
+              uses: actions/upload-artifact@v4
+              with:
+                  name: dist
+                  path: dist
 
-      - name: Deploy to server
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.PROD_SERVER_IP }}
-          username: ${{ secrets.PROD_SERVER_USER }}
-          key: ${{ secrets.PROD_SERVER_SSH }}
-          port: ${{ secrets.PROD_SERVER_PORT }}
-          command: "unzip -o deploy.zip -d dist"
+            - name: Deploy to server
+              uses: appleboy/ssh-action@master
+              with:
+                  host: ${{ secrets.PROD_SERVER_IP }}
+                  username: ${{ secrets.PROD_SERVER_USER }}
+                  key: ${{ secrets.PROD_SERVER_SSH }}
+                  port: ${{ secrets.PROD_SERVER_PORT }}
+                  command: 'unzip -o deploy.zip -d dist'
 
-      - name: Whoami after deploy
-        run: whoami
+            - name: Whoami after deploy
+              run: whoami
 
-      # remove everything except on bash dist/
-      - name: Remove everything except dist/ and node_modules/
-        run: ls -I dist -I node_modules | xargs rm -rf
+            # remove everything except on bash dist/
+            - name: Remove everything except dist/ and node_modules/
+              run: ls -I dist -I node_modules | xargs rm -rf
 
-      - name: Stop bot with pm2 if running
-        run: pm2 stop ania || true
+            - name: Stop bot with pm2 if running
+              run: pm2 stop ania || true
 
-      - name: Start bot with pm2
-        run: pm2 start dist/index.js --name ania
+            - name: Start bot with pm2
+              run: pm2 start dist/index.js --name ania
 
-      - name: Save pm2 process list
-        run: pm2 save
+            - name: Save pm2 process list
+              run: pm2 save
