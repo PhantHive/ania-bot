@@ -202,7 +202,7 @@ export const handleFeedback = async (interaction: ModalSubmitInteraction) => {
     await (channel as TextChannel).send({
         files: [
             {
-                attachment: pdfBuffer,
+                attachment: Buffer.from(pdfBuffer),
                 name: `feedback-${discordName}-${dateString}.pdf`,
             },
         ],

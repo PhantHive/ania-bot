@@ -60,7 +60,7 @@ const checkIfDataIsValid = async (message: Message): Promise<void> => {
     // check if user is in the database and have a email different from ''
     const data = await MV.findOne({ discordId: message.author.id });
     if (data) {
-        if (data.email !== '') {
+        if (data.isVerified) {
             await checkForMissingRoles(message, data);
         } else {
             await message.reply(

@@ -21,7 +21,6 @@ import {
 import data from '../../assets/json/promos.json';
 import { addRole, writeRole, removeRoles } from './ipsaRoles/addRoles';
 import { showModal } from './emailCheck/showModal';
-import { verification } from './emailCheck/checkMail';
 import { RunOptions } from '../../typings/SlashCommand';
 import StudentModel from '../../assets/utils/models/MailSystem';
 
@@ -41,6 +40,7 @@ import { sendNewPage } from '../../SlashCommands/students/src/archive/userPages'
 import { incrementCategoryCounter } from '../../metrics';
 import { feedbackTutorial, handleFeedback } from './feedback/ffeFeedback';
 import { archiveMenu } from '../../SlashCommands/students/archive';
+import { handleVerificationModal } from './emailCheck/handleVerificationModal';
 
 export default new Event('interactionCreate', async (interaction) => {
     if (!interaction.inGuild()) {
@@ -378,22 +378,10 @@ export default new Event('interactionCreate', async (interaction) => {
     if (interaction.isModalSubmit()) {
         const modal = interaction as ModalSubmitInteraction;
 
-        // ===============
-        // IPSA EMAIL SYSTEM
-        // ===============
-        if (modal.customId === 'verification') {
-            await modal.deferReply({ ephemeral: true });
-            // check email using class Verif in checkMail.ts
-            const email = modal.fields.getTextInputValue('email');
-            const verif = new verification(email, modal, client);
-            const isVerified = await verif.startVerif();
-            await modal.editReply({
-                content: isVerified,
-            });
-        }
-
         if (modal.customId === 'feedback') {
             await handleFeedback(modal);
+        } else {
+            await handleVerificationModal(modal, client);
         }
     }
 

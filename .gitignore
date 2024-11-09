@@ -9,3 +9,8 @@ src/assets/aero3Sources/
 src/assets/json/
 dist/
 coverage/
+
+verification.log
+security.log
+error.log
+*.log

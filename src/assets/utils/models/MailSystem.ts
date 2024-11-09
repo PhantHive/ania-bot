@@ -1,19 +1,38 @@
 import mongoose, { Schema } from 'mongoose';
 import type { IStudentDocument } from '../../../typings/MongoTypes';
 
-const studentSchema = new Schema({
-    discordId: String,
-    discordTag: String,
-    firstName: String,
-    secondName: String,
-    promo: Number,
-    city: String,
-    degree: String,
-    assoArt: [String],
-    assoSport: [String],
-    assoTech: [String],
-    email: String,
-});
+const studentSchema = new Schema(
+    {
+        discordId: String,
+        discordTag: String,
+        promo: Number,
+        city: String,
+        degree: String,
+        assoArt: [String],
+        assoSport: [String],
+        assoTech: [String],
+        emailData: {
+            hash: String,
+            salt: String,
+        },
+        isVerified: Boolean,
+        verifiedAt: Date,
+        pendingVerification: {
+            code: String,
+            expiresAt: Date,
+            emailData: {
+                hash: String,
+                salt: String,
+            },
+        },
+        securityLock: {
+            lockedAt: Date,
+            reason: String,
+            expiresAt: Date,
+        },
+    },
+    { timestamps: true }
+);
 
 studentSchema.statics.findOneOrCreate = async function findOneOrCreate(
     this: mongoose.Model<IStudentDocument>,

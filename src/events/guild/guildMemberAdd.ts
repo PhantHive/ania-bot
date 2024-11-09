@@ -1,5 +1,6 @@
 import { Event } from '../../structures/Event';
 import StudentModel from '../../assets/utils/models/MailSystem';
+import { IStudentDocument } from '../../typings/MongoTypes';
 
 const MV = StudentModel;
 
@@ -26,19 +27,19 @@ async function assignPromoRole(member, promo) {
 const checkMemberData = async (member) => {
     try {
         // Check if Student data exists in the database
-        const data = await MV.findOne({ discordId: member.id });
+        const data: IStudentDocument = await MV.findOne({
+            discordId: member.id,
+        });
 
         if (data) {
             // Check if all required fields have values
             if (
                 data.discordId &&
-                data.email &&
+                data.emailData &&
                 data.discordTag &&
                 data.promo !== 0 &&
                 data.degree &&
                 data.city &&
-                data.firstName &&
-                data.secondName &&
                 data.assoArt &&
                 data.assoSport &&
                 data.assoTech
