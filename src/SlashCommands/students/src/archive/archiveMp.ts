@@ -157,7 +157,10 @@ const drawMpCanvas = async (
 const showMps = async (interaction: ButtonInteraction) => {
     let ressource: string;
     data.forEach((promo) => {
-        if (promo['id'] === interaction.guild.id) {
+        if (
+            promo['id'] === interaction.guild.id &&
+            promo['channelId'] === interaction.channel.id
+        ) {
             ressource = promo['ressources'];
         }
     });

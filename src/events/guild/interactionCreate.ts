@@ -256,7 +256,10 @@ export default new Event('interactionCreate', async (interaction) => {
         if (button.customId.endsWith('-topics')) {
             let ressource: string;
             data.forEach((promo) => {
-                if (promo['id'] === button.guild.id) {
+                if (
+                    promo['id'] === interaction.guild.id &&
+                    promo['channelId'] === interaction.channel.id
+                ) {
                     ressource = promo['ressources'];
                 }
             });
@@ -304,7 +307,10 @@ export default new Event('interactionCreate', async (interaction) => {
             // Redraw the buttons
             let ressource: string;
             data.forEach((promo) => {
-                if (promo['id'] === button.guild.id) {
+                if (
+                    promo['id'] === interaction.guild.id &&
+                    promo['channelId'] === interaction.channel.id
+                ) {
                     ressource = promo['ressources'];
                 }
             });
