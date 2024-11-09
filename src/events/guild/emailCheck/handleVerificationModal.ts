@@ -51,9 +51,8 @@ export async function handleVerificationModal(
                         );
                         if (member) {
                             const verifiedRole =
-                                interaction.guild?.roles.cache.find(
-                                    (role) =>
-                                        role.name.toLowerCase() === 'ipsalien'
+                                interaction.guild?.roles.cache.find((role) =>
+                                    role.name.toLowerCase().includes('ipsalien')
                                 );
 
                             if (verifiedRole) {
