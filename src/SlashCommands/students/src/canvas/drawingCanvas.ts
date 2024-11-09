@@ -1,180 +1,157 @@
-import { createCanvas, CanvasRenderingContext2D, Canvas } from 'canvas';
+import {
+    createCanvas,
+    CanvasRenderingContext2D,
+    Canvas,
+    loadImage,
+} from 'canvas';
 import colors from '../colors.json';
+import path from 'path';
 
 interface CoordTopic {
     x: number;
     y: number;
 }
 
-// auto ajust the text size to fit the canvas
-/*
-const autoSizeAjust = async (ctx, size, text) => {
-
-    let fontSize = size;
-
-    do {
-
-        ctx.font = `${fontSize -= 5}px Arial`;
-
-    } while (ctx.measureText(text).width > 500);
-
-    return ctx.font;
-
-}
-*/
-
 const drawArchiveCanvas = async (
     title: string,
     topics: string[]
 ): Promise<Canvas> => {
-    const canvas = createCanvas(700, 750);
+    const canvas = createCanvas(800, 600); // Smaller canvas for minimalist design
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
+    // Load character image
+    const characterImage = await loadImage(
+        path.join(
+            __dirname,
+            '../../../../assets/image/feedback/feedback-lucky.png'
+        )
+    );
+
+    // Clean, dark background
+    ctx.fillStyle = '#0a0f1d';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Subtle top accent line
+    ctx.beginPath();
+    const accentGradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+    accentGradient.addColorStop(0, 'rgba(77, 240, 255, 0)');
+    accentGradient.addColorStop(0.4, 'rgba(77, 240, 255, 0.2)');
+    accentGradient.addColorStop(0.6, 'rgba(77, 240, 255, 0.2)');
+    accentGradient.addColorStop(1, 'rgba(77, 240, 255, 0)');
+    ctx.strokeStyle = accentGradient;
+    ctx.lineWidth = 1;
+    ctx.moveTo(0, 30);
+    ctx.lineTo(canvas.width, 30);
+    ctx.stroke();
+
+    // Minimal top decoration
+    ctx.font = '12px monospace';
+    ctx.fillStyle = 'rgba(77, 240, 255, 0.3)';
+    ctx.fillText('01 FF A2', 20, 20);
+    ctx.fillText('D4 E5 96', canvas.width - 80, 20);
+
+    // Title with subtle glow
     ctx.save();
-    ctx.beginPath();
-    ctx.strokeStyle = colors['lines'];
-    ctx.lineWidth = 3;
-    ctx.moveTo(15, 5);
-    ctx.arcTo(695, 5, 695, 745, 15);
-    ctx.arcTo(695, 745, 5, 745, 15);
-    ctx.arcTo(5, 745, 5, 5, 15);
-    ctx.arcTo(5, 5, 695, 5, 15);
-    ctx.stroke();
-    ctx.clip();
+    ctx.font = 'bold 40px Arial';
+    ctx.shadowColor = '#4df0ff';
+    ctx.shadowBlur = 15;
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(title + ' ...', 30, 80);
+    ctx.restore();
 
-    ctx.save();
+    // Draw minimal neon box
+    const drawNeonBox = (
+        x: number,
+        y: number,
+        width: number,
+        height: number
+    ) => {
+        ctx.save();
 
-    ctx.beginPath();
-    ctx.globalAlpha = 0.7;
-    const gradient = ctx.createLinearGradient(0, 750, 0, 0);
-    gradient.addColorStop(0, colors['main']);
-    gradient.addColorStop(1, colors['second']);
+        // Very subtle background
+        ctx.fillStyle = 'rgba(77, 240, 255, 0.03)';
+        ctx.beginPath();
+        ctx.roundRect(x, y, width, height, 8);
+        ctx.fill();
 
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, 700, 750);
-    ctx.globalAlpha = 1;
-    ctx.closePath();
+        // Minimal neon border
+        ctx.strokeStyle = 'rgba(77, 240, 255, 0.2)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
 
-    // Title
-    ctx.beginPath();
-    ctx.font = '55px Arial';
-    ctx.fillStyle = colors['text'];
-    ctx.shadowBlur = 5;
-    ctx.shadowColor = colors['text'];
-    ctx.fillText(
-        title,
-        canvas.width / 2 - ctx.measureText(title).width / 2,
-        canvas.height * 0.12
-    );
-    ctx.shadowBlur = 0;
-    ctx.closePath();
+        // Left accent line
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgba(77, 240, 255, 0.6)';
+        ctx.moveTo(x, y + height * 0.3);
+        ctx.lineTo(x, y);
+        ctx.lineTo(x + 15, y);
+        ctx.stroke();
+        ctx.restore();
+    };
 
-    ctx.strokeStyle = colors['lines'];
-
-    // decorative lines
-    ctx.beginPath();
-    // left line
-    ctx.moveTo(0, canvas.height * 0.2);
-    ctx.lineWidth = 5;
-    ctx.lineTo(canvas.width / 2 - 22, canvas.height * 0.2);
-    ctx.stroke();
-    ctx.closePath();
-
-    // left arc
-    ctx.beginPath();
-    ctx.arc(
-        canvas.width / 2 - 7,
-        canvas.height * 0.2,
-        15,
-        1.5 * Math.PI,
-        0.5 * Math.PI,
-        true
-    );
-    ctx.stroke();
-    ctx.closePath();
-
-    // right line
-    ctx.beginPath();
-    ctx.moveTo(canvas.width, canvas.height * 0.2);
-    ctx.lineWidth = 5;
-    ctx.lineTo(canvas.width / 2 + 22, canvas.height * 0.2);
-    ctx.stroke();
-    ctx.closePath();
-
-    // right arc
-    ctx.beginPath();
-    ctx.strokeStyle = colors['lines'];
-    ctx.arc(
-        canvas.width / 2 + 7,
-        canvas.height * 0.2,
-        15,
-        1.5 * Math.PI,
-        0.5 * Math.PI
-    );
-    ctx.stroke();
-    ctx.closePath();
-
-    // choices
-    ctx.beginPath();
-    ctx.font = '35px Arial';
-    ctx.fillStyle = colors['text'];
-
-    const availableSpace = canvas.width * 0.5;
-    const firstHalf = Math.round(topics.length / 2);
-    const elementPlace = availableSpace / firstHalf / 2 + 0.25 * canvas.width;
-
-    const coordTopics: CoordTopic[] = [];
-
-    topics.forEach((_topic, index) => {
-        // Calculate coordinate for first half
-        if (index < firstHalf) {
-            const x = canvas.width * 0.05;
-            const y = elementPlace * (1 + index * 0.5);
-            coordTopics.push({ x, y });
-
-            // Calculate coordinate for second half
-        } else {
-            const i = index - firstHalf;
-            const x = canvas.width * 0.6;
-            const y = elementPlace * (1 + i * 0.5);
-            coordTopics.push({ x, y });
-        }
-    });
+    // Topics with cleaner layout
+    const topicStartY = 120;
+    const topicHeight = 50;
+    const boxWidth = 300;
 
     topics.forEach((topic, index) => {
-        ctx.fillText(
-            `${index + 1} • ${topic}`,
-            coordTopics[index].x,
-            coordTopics[index].y
-        );
+        const row = Math.floor(index / 2);
+        const col = index % 2;
+        const x = 30 + col * (boxWidth + 20);
+        const y = topicStartY + row * 65;
+
+        drawNeonBox(x, y, boxWidth, topicHeight);
+
+        // Clean, readable text
+        ctx.save();
+        ctx.font = 'bold 24px Arial';
+
+        // Subtle shadow for readability
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+        ctx.shadowBlur = 4;
+        ctx.shadowOffsetX = 1;
+        ctx.shadowOffsetY = 1;
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText(`${index + 1} • ${topic}`, x + 15, y + 32);
+        ctx.restore();
     });
 
-    ctx.closePath();
-
-    // decorative lines bottom
-    ctx.beginPath();
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = colors['lines'];
-    ctx.moveTo(0, canvas.height * 0.88);
-    ctx.lineTo(canvas.width, canvas.height * 0.88);
-    ctx.moveTo(0, canvas.height * 0.9);
-    ctx.lineTo(canvas.width, canvas.height * 0.9);
-    ctx.stroke();
-    ctx.closePath();
-
-    // credits
-    ctx.beginPath();
-    ctx.font = 'italic 25px Arial';
-    ctx.fillStyle = colors['lines'];
-    const credit = 'phanthive.com';
-    ctx.fillText(
-        credit,
-        canvas.width / 2 - ctx.measureText(credit).width / 2,
-        canvas.height * 0.955
+    // Draw character with smaller size
+    const charHeight = 270; // Reduced size
+    const aspectRatio = characterImage.width / characterImage.height;
+    const charWidth = charHeight * aspectRatio;
+    ctx.drawImage(
+        characterImage,
+        canvas.width - charWidth,
+        canvas.height - charHeight,
+        charWidth,
+        charHeight
     );
-    ctx.closePath();
 
+    // Minimal search button
+    const searchBtnY = canvas.height - 80;
     ctx.save();
+
+    ctx.beginPath();
+    ctx.fillStyle = 'rgba(77, 240, 255, 0.05)';
+    ctx.strokeStyle = 'rgba(77, 240, 255, 0.3)';
+    ctx.lineWidth = 1.5;
+    ctx.roundRect(30, searchBtnY, 180, 40, 20);
+    ctx.fill();
+    ctx.stroke();
+
+    // Button text
+    ctx.font = '20px Arial';
+    ctx.fillStyle = '#ffffff';
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+    ctx.shadowBlur = 4;
+    ctx.fillText('Need help?', 65, searchBtnY + 26);
+    ctx.restore();
+
+    // Minimal credits
+    ctx.font = '16px monospace';
+    ctx.fillStyle = 'rgba(77, 240, 255, 0.5)';
+    ctx.fillText('// lucky.phearion.fr', 30, canvas.height - 20);
 
     return canvas;
 };
