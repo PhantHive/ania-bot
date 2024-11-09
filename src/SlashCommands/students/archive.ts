@@ -9,10 +9,12 @@ import { SlashCommand } from '../../structures/SlashCommand';
 import { Canvas } from 'canvas';
 import { numbers } from './src/archive/userPages';
 import { incrementArchiveCommandCounter } from '../../metrics';
+import StudentModel from '../../assets/utils/models/MailSystem';
+import { IStudentDocument } from '../../typings/MongoTypes';
 
 export const archiveMenu = async (interaction) => {
     const topics = ['MP', 'TP', 'FICHES', 'DONATION'];
-    const canvas: Canvas = await drawArchiveCanvas('The Archive', topics);
+    const canvas: Canvas = await drawArchiveCanvas('The Archive v6', topics);
 
     // Button builders
     const mpButton = new ButtonBuilder()
@@ -71,6 +73,19 @@ exports.default = new SlashCommand({
         const userId = interaction.user.id;
         const username = interaction.user.username;
         const command = 'archive';
+
+        const user: IStudentDocument = await StudentModel.findOne({
+            discordId: userId,
+            isVerified: true,
+        });
+
+        if (!user) {
+            await interaction.reply({
+                content: 'You must verify your email first.',
+                ephemeral: true,
+            });
+            return;
+        }
 
         console.log(
             `[${timestamp}] User ${username} (ID: ${userId}) summoned the ${command} command.`

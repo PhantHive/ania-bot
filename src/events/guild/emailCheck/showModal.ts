@@ -69,7 +69,7 @@ const createInfoEmbed = (interaction: ButtonInteraction): EmbedBuilder => {
         .addFields(
             {
                 name: 'Privacy Notice',
-                value: 'Your email will be encrypted and stored securely. For more information about our privacy policy, visit https://phearion.fr/privacy',
+                value: 'Your email will be encrypted and stored securely. For more information about our privacy policy, visit https://lucky.phearion.fr/#/privacy',
             },
             {
                 name: 'Need Help?',
